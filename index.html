@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#05070d">
+<meta name="description" content="Turbo Racer Ultimate — 150 ta bosqich, 50 ta mashina, kuchaytirish, yutuqlar va rekordlar. Internetsiz ishlaydi.">
+<meta name="color-scheme" content="dark">
+<title>TURBO RACER DUO · 5000M · 2 kishilik onlayn poyga</title>
+<style>
+:root{--fg:#f6f7fb;--muted:#9aa6c0;--red:#ff3b4e;--gold:#ffc83d;--line:rgba(255,255,255,.14);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{background:#05070d;display:grid;place-items:center;overflow:hidden;color:var(--fg);
+  font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:none;-webkit-tap-highlight-color:transparent}
+#wrap{position:relative;overflow:hidden;border-radius:16px;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#game{display:block}
+#ui{position:absolute;left:0;top:0;width:480px;height:800px;transform-origin:0 0}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;gap:10px;padding:22px 20px;
+  background:radial-gradient(120% 60% at 50% 0%,rgba(255,59,78,.24),transparent 60%),rgba(9,12,22,.94);overflow:auto}
+.scr.show{display:flex}
+h1{margin:18px 0 0;font-size:58px;line-height:.9;font-weight:900;font-style:italic;letter-spacing:-2px}
+h1 span{display:block;font-size:64px;background:linear-gradient(90deg,#ff3b4e,#ffc83d);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{margin:0;font-size:34px;font-weight:900;font-style:italic}
+.sub{margin:0;color:var(--muted);font-size:14px;text-align:center}
+.top{width:100%;display:flex;justify-content:space-between;align-items:center}
+.coins{font-weight:900;font-size:18px;color:var(--gold)}
+.btn{font:inherit;font-weight:800;border-radius:12px;padding:11px 20px;font-size:15px;color:#fff;cursor:pointer;background:rgba(255,255,255,.1);border:1px solid var(--line)}
+.btn:active{transform:translateY(1px)}
+.btn.main{background:linear-gradient(180deg,#ff5468,#e0213a);border-color:#ff8a98;box-shadow:0 4px 0 #8f1022}
+.btn.gold{background:linear-gradient(180deg,#ffd75e,#e6a600);color:#2a1d00;border-color:#ffe9a0;box-shadow:0 4px 0 #8a6200}
+.btn.big{font-size:19px;padding:14px 0;width:320px}
+.btn[disabled]{opacity:.4;cursor:not-allowed;box-shadow:none}
+.menu{display:flex;flex-direction:column;gap:12px;margin-top:20px;align-items:center}
+.maps{display:grid;gap:12px;width:100%;margin-top:6px}
+.mapcard{position:relative;height:118px;border-radius:16px;border:1px solid var(--line);cursor:pointer;overflow:hidden;color:#fff;text-align:left;padding:14px 16px;font:inherit}
+.mapcard b{font-size:22px;font-weight:900;font-style:italic;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.mapcard small{display:block;font-size:13px;opacity:.85;margin-top:4px}
+.mapcard .prog{position:absolute;right:14px;bottom:12px;font-weight:800;font-size:13px}
+.mapcard[disabled]{filter:grayscale(1) brightness(.55);cursor:not-allowed}
+.lvls{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%}
+.lv{height:64px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:900;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:17px}
+.lv small{font-size:10px;color:var(--gold);letter-spacing:1px}
+.lv.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,200,61,.35) inset}
+.lv[disabled]{opacity:.3;cursor:not-allowed}
+.garage{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+#gPrev{width:100%;height:200px;border-radius:16px;background:radial-gradient(circle at 50% 40%,#1d2440,#0a0d18);border:1px solid var(--line)}
+.gnav{display:flex;align-items:center;gap:10px;width:100%;justify-content:center}
+.arrow{width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:26px;cursor:pointer}
+#gName{font-size:22px;font-weight:900;font-style:italic;text-align:center}
+.stats{width:320px;display:grid;gap:4px}
+.st{display:grid;grid-template-columns:90px 1fr;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.bar{height:7px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#27f3a0,#ffc83d,#ff3b4e)}
+#grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:100%}
+#grid canvas{width:100%;aspect-ratio:1.45;border-radius:7px;border:1px solid var(--line);cursor:pointer;background:#131a2c}
+#grid canvas.sel{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,200,61,.5)}
+#grid canvas.own{background:#1d2a3f}
+.hint{margin:0;font-size:12px;color:var(--muted);text-align:center}
+.stars{font-size:46px;letter-spacing:6px;color:var(--gold)}
+.stars .off{color:rgba(255,255,255,.2)}
+.icon{position:absolute;left:10px;top:8px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.45);color:#fff;font-size:13px;cursor:pointer;display:none;z-index:3}
+.icon.show{display:block}
+#touch{position:absolute;left:0;right:0;bottom:14px;height:84px;display:none;z-index:3;pointer-events:none}
+#touch.show{display:block}
+#touch button{position:absolute;bottom:0;height:78px;border-radius:18px;border:2px solid rgba(255,255,255,.35);background:rgba(10,14,28,.45);color:#fff;font-weight:900;font-size:20px;pointer-events:auto;touch-action:none}
+#touch button.on{background:rgba(255,59,78,.6)}
+#tL{left:10px;width:100px}#tR{left:120px;width:100px}
+#tB{right:120px;width:90px;font-size:13px}#tN{right:10px;width:100px;font-size:14px;color:#7fe7ff;border-color:#7fe7ff}
+#tF{right:10px;bottom:96px;width:100px;height:54px;font-size:14px;color:#ffd23f;border-color:#ffd23f}
+
+/* =========== ULTIMATE UI =========== */
+*{box-sizing:border-box}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid #77f3ff;outline-offset:3px}
+#wrap{border:1px solid rgba(255,255,255,.14);border-radius:22px;isolation:isolate;box-shadow:0 25px 100px rgba(0,0,0,.85),0 0 70px rgba(254,60,88,.12)}
+.scr{gap:14px;padding:28px 25px 35px;background:radial-gradient(105% 50% at 47% -5%,rgba(255,69,104,.23),transparent 74%),linear-gradient(160deg,rgba(9,13,27,.97),rgba(9,15,29,.94) 65%,rgba(13,9,31,.97));scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent;touch-action:pan-y;overscroll-behavior:contain}
+h1{font-size:57px;letter-spacing:-2.8px;text-shadow:0 5px 35px rgba(255,59,78,.2);line-height:.91}
+h1 span{font-size:62px}
+h2{font-size:30px;line-height:1.1;letter-spacing:-.8px;text-align:center}
+.top{flex-shrink:0;min-height:42px}
+.btn{min-height:44px;transition:background .15s ease,border-color .15s ease;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.btn:hover:not([disabled]){border-color:rgba(255,255,255,.4);background-color:rgba(255,255,255,.16)}
+.btn.main:hover:not([disabled]){background:linear-gradient(180deg,#ff7082,#db1c38)}
+.btn.gold:hover:not([disabled]){background:linear-gradient(180deg,#ffe47a,#d99b00)}
+.btn.big{width:100%;min-height:57px;font-size:17px;letter-spacing:.3px}
+.brand-kicker{font-size:11px;letter-spacing:3.5px;color:#80eaff;font-weight:900;text-align:center;margin-top:5px}
+.hero-brand{width:100%;padding:10px 0 14px;text-align:center;position:relative}
+.hero-brand:after{content:'';position:absolute;bottom:3px;left:19%;right:19%;height:2px;background:linear-gradient(90deg,transparent,#fb5368,#ffd15b,transparent)}
+.hero-lead{color:#bbc7df;text-align:center;font-size:14px;line-height:1.5;margin:7px auto 0;max-width:345px}
+.tiny-label{font-size:11px;font-weight:900;letter-spacing:1.9px;text-transform:uppercase;color:#aab7d0;align-self:flex-start}
+.home-meta{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:4px}
+.meta-card{background:linear-gradient(160deg,rgba(36,48,73,.8),rgba(14,22,38,.85));border:1px solid rgba(255,255,255,.11);padding:13px 8px;border-radius:15px;text-align:center}
+.meta-card strong{display:block;font-size:23px;font-style:italic;color:#fff;font-weight:900}
+.meta-card span{display:block;font-size:10px;margin-top:3px;color:#aebdd5}
+.menu{margin-top:4px;width:100%;gap:11px}
+.home-duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.home-duo .btn{width:100%;padding:12px 6px;font-size:14px}
+#sTitle .hint{font-size:11px;line-height:1.6;background:rgba(255,255,255,.045);border-radius:12px;padding:10px 12px}
+.coins{font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:7px 11px;font-size:11px;color:#ffdca3;border:1px solid rgba(255,199,85,.3);background:rgba(255,199,85,.07);border-radius:99px;font-weight:800}
+.section-card{background:linear-gradient(145deg,rgba(37,48,76,.72),rgba(13,19,34,.8));border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:13px 15px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.prefs-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:6px 0}
+.prefs-row b{font-size:14px}
+.prefs-row small{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:5px}
+.prefs-row .btn{min-width:132px;padding:10px 12px;font-size:12px;white-space:nowrap}
+.stats-big{display:grid;width:100%;grid-template-columns:repeat(2,1fr);gap:10px}
+.stats-big .meta-card strong{font-size:27px}
+.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;width:100%}
+.badge-card{border:1px solid rgba(255,255,255,.16);background:rgba(25,35,57,.7);padding:13px;border-radius:14px;min-height:107px}
+.badge-card.locked{opacity:.47;filter:grayscale(.8)}
+.badge-card .emoji{font-size:24px;float:right}
+.badge-card b{display:block;font-size:13px;margin:3px 0}
+.badge-card small{color:#bac6de;font-size:11px;line-height:1.3;display:block}
+.badge-card .reward{color:#ffd158;margin-top:7px;display:block;font-size:11px;font-weight:900}
+.badge-card.unlocked{border-color:rgba(255,199,72,.6);background:rgba(93,68,21,.25)}
+.garage-up{width:100%;display:grid;gap:8px}
+.up-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 10px;border:1px solid rgba(255,255,255,.11);border-radius:11px;background:rgba(255,255,255,.04)}
+.up-row span{font-size:12px;font-weight:800}
+.up-row small{font-size:10px;color:#8fa1bf}
+.up-row .btn{font-size:11px;padding:8px;min-height:34px}
+.mini-dots{display:inline-block;letter-spacing:3px;font-size:11px;color:#ffc83d}
+#grid{grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+#grid canvas{aspect-ratio:1.3;border-radius:9px;background:radial-gradient(circle at 48% 35%,#27364f,#0e182a 80%)}
+#gPrev{height:216px;border:1px solid rgba(175,201,235,.28);box-shadow:inset 0 0 35px rgba(75,128,200,.12)}
+#sGarage .stats{width:100%}
+#sGarage #gName{min-width:220px;max-width:220px;font-size:19px}
+#sLevels .lvls{grid-template-columns:repeat(5,1fr);gap:9px}
+#sLevels .lv{height:62px}
+.mapcard{height:132px;transition:transform .15s ease,border-color .15s ease}
+.mapcard:hover:not([disabled]){transform:translateY(-2px);border-color:rgba(255,255,255,.6)}
+#sEnd{justify-content:center}
+#sEnd .end-info{line-height:1.65;color:#b5c4e0;text-align:center}
+#sEnd .end-details{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#sEnd .end-details .meta-card strong{font-size:21px}
+.icon{top:10px;left:12px;background:rgba(7,12,24,.74);border-radius:12px;width:43px;height:43px;font-size:16px}
+#touch{bottom:16px;height:180px}
+#touch button{user-select:none;-webkit-user-select:none;box-shadow:0 8px 25px rgba(0,0,0,.4);backdrop-filter:blur(4px)}
+#tL{left:12px;bottom:4px;width:94px}
+#tR{left:116px;bottom:4px;width:94px}
+#tB{right:116px;bottom:4px;width:94px}
+#tN{right:12px;bottom:4px;width:94px}
+#touch #tF{right:12px;bottom:100px;width:94px;height:60px;font-size:14px;color:#ffd23f;border-color:#ffd23f}
+#touch .on{background:rgba(255,56,87,.7)}
+.toast{position:absolute;left:50%;top:150px;transform:translate(-50%,-16px);min-width:220px;max-width:430px;text-align:center;z-index:15;background:rgba(14,24,44,.96);border:1px solid rgba(255,199,80,.65);border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.5);color:#fff;font-size:14px;font-weight:800;line-height:1.45;padding:13px 18px;pointer-events:none;opacity:0;transition:opacity .22s,transform .22s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){.btn,.toast,.mapcard{transition:none}}
+
+/* DUO 5000M: Firebase orqali ikki kishilik poyga */
+.duel-tag{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border:1px solid rgba(127,231,255,.4);background:rgba(18,62,95,.35);border-radius:50px;color:#9deaff;font-size:12px;font-weight:900;letter-spacing:1px}
+.duel-card{padding:15px 16px;background:linear-gradient(140deg,#182e4a,#101525);border:1px solid rgba(132,188,255,.24);border-radius:17px;width:100%;display:flex;flex-direction:column;gap:11px}
+.duel-code{font-size:36px;font-weight:900;letter-spacing:7px;text-align:center;color:#ffd053;text-shadow:0 2px 16px #bb8d0055;user-select:text;-webkit-user-select:text}
+.duel-input{width:100%;background:#081526;color:#fff;border:2px solid #44617c;border-radius:12px;letter-spacing:5px;text-transform:uppercase;text-align:center;font-size:24px;padding:12px;user-select:text;-webkit-user-select:text}
+.duel-people{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%}
+.duel-person{min-width:0;padding:13px 8px;background:#0b172a;border:1px solid #3a5879;border-radius:13px;text-align:center}
+.duel-person b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.duel-person small{font-size:11px;color:#b4c9e4}
+#duelNotice{min-height:45px}
+#duelLobby[hidden],#duelNew[hidden]{display:none!important}
+/* Firebase cloud / account / leaderboard */
+.cloud-title{font-size:17px;color:#d9ebff;font-weight:900;text-align:left;width:100%}
+.cloud-field{display:flex;flex-direction:column;gap:6px;width:100%}
+.cloud-field label{font-size:12px;font-weight:900;color:#b5c7e6}
+.cloud-field input{width:100%;min-height:47px;border:1px solid rgba(255,255,255,.25);border-radius:11px;padding:10px 13px;background:#121e34;color:#fff;font-size:16px;touch-action:manipulation;user-select:text;-webkit-user-select:text}
+.cloud-field input:focus{outline:2px solid #51baff;border-color:#51baff}
+.cloud-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.cloud-actions .btn{font-size:13px;padding:9px 9px;min-width:0}
+.cloud-status{width:100%;padding:10px 12px;border-radius:11px;border:1px solid rgba(255,255,255,.15);background:#10182a;color:#cce4ff;font-size:13px;line-height:1.5;overflow-wrap:anywhere;text-align:center}
+.cloud-status.warn{border-color:rgba(255,192,84,.5);color:#ffe2a2}
+.cloud-status.error{border-color:rgba(255,90,108,.55);color:#ffacb8}
+#cloudChoice[hidden],#cloudForm[hidden],#cloudSigned[hidden],#cloudAuthHelp[hidden]{display:none!important}
+.cloud-info{font-size:12px;line-height:1.55;color:#bac9e0;margin:4px 0}
+.leader-row{display:grid;grid-template-columns:30px minmax(0,1fr) 70px 76px;gap:7px;align-items:center;width:100%;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 9px;background:rgba(23,36,60,.75);font-size:12px}
+.leader-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leader-row strong{color:#ffd454;text-align:right}
+.leader-row span:last-child{text-align:right;color:#c5d9f5}
+.leader-row.me{border-color:#ffd454;background:rgba(105,77,17,.4)}
+#leaderList{display:grid;gap:7px;width:100%}
+#sAccount .btn.big,#sLeaderboard .btn.big{width:100%}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+  <div id="ui">
+    <button id="pauseBtn" class="icon" aria-label="Pauza">❚❚</button>
+    <div id="touch">
+      <button id="tL">◀</button><button id="tR">▶</button>
+      <button id="tB">TORMOZ</button><button id="tN">⚡ NITRO</button>
+      <button id="tF">🔫 OTISH</button>
+    </div>
+
+    <section id="sTitle" class="scr show">
+      <div class="brand-kicker">★ ULTIMATE ARCADE EDITION ★</div>
+      <div class="hero-brand"><h1>TURBO<span>RACER</span></h1><p class="hero-lead">Cheksiz tezlik. Katta garaj. Haqiqiy chempionlik sari poyga.</p></div>
+      <span class="pill">● 3 TA XARITA &nbsp;•&nbsp; 150 LEVEL &nbsp;•&nbsp; 50 MASHINA</span>
+      <div class="home-meta">
+        <div class="meta-card"><strong id="homeWins">0</strong><span>G‘alabalar</span></div>
+        <div class="meta-card"><strong id="homeCars">1/50</strong><span>Mashinalar</span></div>
+        <div class="meta-card"><strong id="homeBadges">0/12</strong><span>Yutuqlar</span></div>
+      </div>
+      <div class="menu">
+        <button class="btn main big" id="bContinue">▶ DAVOM ETTIRISH</button>
+        <button class="btn big" id="bPlay">🗺 XARITA VA LEVELLAR</button>
+        <button class="btn gold big" id="bGarage">🏎 GARAJ & TUNING</button>
+        <button class="btn big" id="bDuel" style="border-color:#58dfff;color:#c8f8ff;background:linear-gradient(100deg,#143050,#153d45)">👥 2 KISHILIK POYGA · 5000 M</button>
+        <div class="home-duo"><button class="btn" id="bRecords">🏆 NATIJALAR</button><button class="btn" id="bSettings">⚙ SOZLAMALAR</button></div>
+      </div>
+      <div class="coins" id="tCoins"></div>
+      <p class="hint">💻 ← → / A D — burilish · Space — nitro · ↓ — tormoz · K — o‘q · P/Esc — pauza.<br>📱 Sozlamalardan tugmalar yoki surish usulini tanlang.</p>
+      <p class="sub">🎮 O‘yin offline ishlaydi · ☁️ Firebase sinxronlash uchun internet kerak</p>
+    </section>
+
+    <section id="sDuel" class="scr">
+      <div class="top"><button class="btn" id="duelBack">← Bosh menyu</button><span class="duel-tag">🟢 ONLINE · 2 PLAYER</span></div>
+      <h2>🏁 DO‘ST BILAN POYGA</h2>
+      <p class="sub">5000 metr · 2 ta haqiqiy o‘yinchi · konus, neft, bochka, yuk mashinasi, nitro va qalqon.</p>
+      <div id="duelNotice" class="cloud-status" aria-live="polite">Firebase tekshirilmoqda…</div>
+      <div id="duelNew" class="duel-card">
+        <p class="tiny-label" style="margin:0">1. DO‘STINGIZNI TAKLIF QILING</p>
+        <div class="cloud-field"><label for="duelMap">Xarita</label><select id="duelMap" class="duel-input" style="letter-spacing:0;font-size:17px;text-align:left"><option value="0">🌳 Yashil vodiy</option><option value="1">🏜 Cho‘l yo‘li</option><option value="2">🌃 Neon shahar</option></select></div>
+        <button class="btn main big" id="duelCreate">➕ YANGI XONA YARATISH</button>
+        <p class="tiny-label" style="margin:8px 0 0">2. YOKI DO‘STINGIZ KODINI KIRITING</p>
+        <input class="duel-input" id="duelInput" placeholder="ABCD2345" maxlength="8" minlength="8" spellcheck="false" autocomplete="off" aria-label="8 belgili xona kodi">
+        <button class="btn gold big" id="duelJoin">🔗 XONAGA ULANISH</button>
+      </div>
+      <div class="duel-card" id="duelLobby" hidden>
+        <p class="tiny-label" style="margin:0">DO‘STINGIZGA SHU KODNI YUBORING</p>
+        <div class="duel-code" id="duelCode">--------</div>
+        <div class="duel-people"><div class="duel-person"><b id="duelHost">Siz</b><small>1-o‘yinchi</small></div><div class="duel-person"><b id="duelGuest">Kutilmoqda…</b><small>2-o‘yinchi</small></div></div>
+        <p class="sub" id="duelWait">Ikkinchi o‘yinchi kod bilan kirsa, poyga avtomatik boshlanadi.</p>
+        <button class="btn" id="duelLeave">🚪 XONADAN CHIQISH</button>
+      </div>
+      <p class="hint">Ikkala o‘yinchida ham Firebase akkaunti, internet va o‘yinning shu versiyasi bo‘lishi kerak. Ikkingiz bir xil 5000 m trassada poygalashasiz; raqib avtomobili xaritada ko‘rinadi. Poyga boshlanganidan keyin pauza raqibni to‘xtatmaydi.</p>
+      <button class="btn" id="duelAccount">👤 FIREBASE AKKAUNTGA KIRISH</button>
+    </section>
+
+    <section id="sMaps" class="scr">
+      <div class="top"><button class="btn" data-back="sTitle">← Orqaga</button><div class="coins" id="mCoins"></div></div>
+      <h2>XARITANI TANLANG</h2>
+      <div class="maps" id="maps"></div>
+    </section>
+
+    <section id="sLevels" class="scr">
+      <div class="top"><button class="btn" data-back="sMaps">← Xaritalar</button><div class="coins" id="lCoins"></div></div>
+      <h2 id="lTitle">XARITA</h2>
+      <div class="lvls" id="lvls"></div>
+      <p class="hint">Har level 1 yulduzdan 3 yulduzgacha. Yulduz = qolgan hayotlar.</p>
+    </section>
+
+    <section id="sGarage" class="scr">
+      <div class="top"><button class="btn" data-back="sTitle">← Orqaga</button><div class="coins" id="gCoins"></div></div>
+      <h2>GARAJ · <span id="gCount"></span></h2>
+      <div class="garage">
+        <canvas id="gPrev" width="960" height="400"></canvas>
+        <div class="gnav"><button class="arrow" id="gL">‹</button><div id="gName"></div><button class="arrow" id="gR">›</button></div>
+        <div class="stats" id="gStats"></div>
+        <div id="gAct"></div>
+        <div class="tiny-label">🔧 MASHINANI KUCHAYTIRISH</div>
+        <div id="gUpgrades" class="garage-up"></div>
+      </div>
+      <div class="tiny-label">🏎 AVTOMOBILLAR KOLLEKSIYASI (50 TA)</div>
+      <div id="grid"></div>
+    </section>
+
+    <section id="sPause" class="scr">
+      <h2>PAUZA</h2>
+      <button class="btn main big" id="pResume">Davom etish</button>
+      <button class="btn big" id="pRestart">Qayta boshlash</button>
+      <button class="btn big" id="pLevels">Level tanlash</button>
+      <div class="section-card" id="pSummary"></div>
+      <button class="btn" id="pSound">🔊 Ovoz</button>
+      <button class="btn" id="pSettings">⚙ Sozlamalar</button>
+    </section>
+
+    <section id="sEnd" class="scr"></section>
+
+    <section id="sAccount" class="scr">
+      <div class="top"><button class="btn" data-back="sTitle">← Orqaga</button><span class="pill">☁ FIREBASE</span></div>
+      <h2>👤 O‘YINCHI AKKAUNTI</h2>
+      <p class="sub">marra-1 · Email/parol bilan kirish · Bulutda o‘yin natijalarini saqlash</p>
+      <div id="cloudStatus" class="cloud-status" role="status" aria-live="polite">Firebase ishga tushmoqda…</div>
+      <div id="cloudForm" class="section-card">
+        <div class="cloud-field"><label for="cloudEmail">Email</label><input id="cloudEmail" type="email" placeholder="name@example.com" autocomplete="email" maxlength="254"></div>
+        <div class="cloud-field" style="margin-top:11px"><label for="cloudPassword">Parol (kamida 6 belgi)</label><input id="cloudPassword" type="password" placeholder="Parolingiz" autocomplete="current-password" minlength="6"></div>
+        <div class="cloud-field" style="margin-top:11px"><label for="cloudNick">Taxallus (ro‘yxatdan o‘tishda)</label><input id="cloudNick" type="text" placeholder="Turbo Poygachi" maxlength="24" autocomplete="nickname"></div>
+        <div class="cloud-actions" style="margin-top:12px"><button class="btn main" id="cloudLogin">KIRISH</button><button class="btn gold" id="cloudSignup">RO‘YXATDAN O‘TISH</button></div>
+        <button class="btn" id="cloudResetPassword" style="width:100%;margin-top:8px">Parolni tiklash xatini yuborish</button>
+        <p class="cloud-info">Akkauntsiz ham o‘ynashingiz mumkin. Bulutga saqlash uchun kirish kerak.</p>
+      </div>
+      <div id="cloudSigned" class="section-card" hidden>
+        <div class="cloud-title" id="cloudPlayerName">O‘yinchi</div>
+        <p id="cloudUserEmail" class="cloud-info"></p>
+        <p id="cloudSyncInfo" class="cloud-info"></p>
+        <div class="cloud-actions"><button class="btn" id="cloudSyncNow">↻ HOZIR SAQLASH</button><button class="btn" id="cloudLogout">CHIQISH</button></div>
+      </div>
+      <div id="cloudChoice" class="section-card" hidden>
+        <div class="cloud-title">Qaysi natijalarni ishlatamiz?</div>
+        <p id="cloudChoiceInfo" class="cloud-info"></p>
+        <button class="btn main big" id="cloudLoad">☁️ BULUTDAN YUKLASH</button>
+        <button class="btn gold big" id="cloudPush" style="margin-top:9px">⬆️ SHU QURILMADAN BULUTGA</button>
+        <p class="cloud-info">⚠️ Tanlov mavjud progressni almashtirishi mumkin. Bulutdan yuklashdan oldin mahalliy progress zaxira qilinadi.</p>
+      </div>
+      <button class="btn big" id="cloudGoRanking">🏆 REYTINGNI KO‘RISH</button>
+      <div class="section-card"><b>🔐 Saqlash qanday ishlaydi?</b><p class="cloud-info">Darajalar, tangalar, mashinalar, tuning, yutuqlar va rekordlar shaxsiy profilingizda saqlanadi. Saqlanmagan o‘zgarishlar qurilmada qoladi. Bir nechta qurilmada bir vaqtda o‘ynamang — so‘nggi saqlov ustun keladi.</p></div>
+    </section>
+
+    <section id="sLeaderboard" class="scr">
+      <div class="top"><button class="btn" data-back="sTitle">← Orqaga</button><span class="pill">🌍 TOP 25</span></div>
+      <h2>🏆 GLOBAL REYTING</h2>
+      <p class="sub">G‘alabalar soni bo‘yicha TOP 25 o‘yinchi</p>
+      <button id="leaderRefresh" class="btn gold big">↻ REYTINGNI YANGILASH</button>
+      <div id="leaderState" class="cloud-status">Reyting yuklanmoqda…</div>
+      <div id="leaderList"></div>
+      <p class="cloud-info">Eslatma: reyting foydalanuvchi qurilmasidan yuboriladi. Rasmiy musobaqa uchun serverda tekshirish kerak.</p>
+    </section>
+
+    <section id="sRecords" class="scr">
+      <div class="top"><button class="btn" data-back="sTitle">← Orqaga</button><div class="coins" id="rCoins"></div></div>
+      <h2>🏆 NATIJALAR & YUTUQLAR</h2>
+      <p class="sub">Bosqichlar, rekordlar va maxsus sovrinlar.</p>
+      <div class="stats-big" id="recordStats"></div>
+      <div class="tiny-label">🎖 YUTUQLAR — BIR MARTALIK SOVRIN</div>
+      <div id="badges" class="badges"></div>
+    </section>
+
+    <section id="sSettings" class="scr">
+      <div class="top"><button class="btn" id="settingsBack">← Orqaga</button><div class="coins" id="settingsCoins"></div></div>
+      <h2>⚙ SOZLAMALAR</h2>
+      <p class="sub">Boshqaruv, grafika va o‘yin saqlash.</p>
+      <div class="section-card">
+        <div class="prefs-row"><div><b>🔊 Ovoz</b><small>Motor, otish, sovrin va to‘qnashuvlar</small></div><button class="btn" id="setSound"></button></div>
+        <div class="prefs-row"><div><b>📱 Boshqaruv</b><small>Tugmalar / barmoq bilan surish</small></div><button class="btn" id="setControls"></button></div>
+        <div class="prefs-row"><div><b>✨ Grafika</b><small>Past — eski telefonlar uchun tezroq</small></div><button class="btn" id="setQuality"></button></div>
+        <div class="prefs-row"><div><b>📳 Vibratsiya</b><small>Mobil telefonda to‘qnashuv signali</small></div><button class="btn" id="setVibrate"></button></div>
+        <div class="prefs-row"><div><b>⛶ To‘liq ekran</b><small>Brauzer qo‘llasa, ekran kengayadi</small></div><button class="btn" id="setFullscreen">YOQISH</button></div>
+      </div>
+      <div class="section-card"><div class="prefs-row"><div><b>☁️ Firebase akkaunt</b><small>Bulutda saqlash va reyting</small></div><button class="btn" id="settingsCloud">AKKAUNT</button></div></div>
+      <div class="section-card"><b>🎮 O‘YNASH QOIDALARI</b><p class="hint" style="line-height:1.8;margin-top:9px">3 ta hayotni asrang, finishgacha yeting. Tangalarga mashina oling va tuning qiling. ⚡ Nitro tezlikni oshiradi. 🛡 Qalqon bir marta to‘qnashuvdan saqlaydi. 🧲 Magnit tangalarni tortadi.<br><br>📱 Tugmalar rejimida gaz avtomatik. Surish rejimida ekranga barmoq qo‘ying. Kompyuterda o‘qlar / A-D / K / Space / P.</p></div>
+      <div class="section-card"><div class="prefs-row"><div><b>🗑 Ma’lumotlarni qayta boshlash</b><small>Hamma tanga, bosqich, mashina va rekord o‘chadi.</small></div><button class="btn" id="setReset">TOZALASH</button></div></div>
+    </section>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+/* ================= yordamchi ================= */
+const $=id=>document.getElementById(id);
+const W=480,H=800,RL=70,RR=410,LANES=4,LW=(RR-RL)/LANES,PY=600,K=2.5,PXM=K*3.6;
+const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.random()*a.length|0],clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const laneX=i=>RL+LW*(i+.5),TAU=Math.PI*2;
+const cl=(h,l,s)=>`hsl(${h.toFixed(0)},${s||80}%,${l}%)`;
+
+/* ================= saqlash ================= */
+const st={get(k,d){try{const v=localStorage.getItem('tr3_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('tr3_'+k,JSON.stringify(v))}catch(e){}}};
+const S={coins:st.get('coins',0),owned:st.get('owned',[0]),car:st.get('car',0),
+  prog:st.get('prog',[1,0,0]),stars:st.get('stars',{}),sound:st.get('sound',true),
+  upgrades:st.get('upgrades',{}), achievements:st.get('achievements',[]), stats:st.get('stats',{}),
+  settings:st.get('settings',{controls:'buttons',quality:'high',vibrate:true}),bestTimes:st.get('bestTimes',{})};
+const STAT_DEFAULT={races:0,wins:0,failures:0,distance:0,coins:0,shots:0,kills:0,near:0,crashes:0,bestScore:0,perfect:0};
+  if(!Array.isArray(S.owned))S.owned=[0];
+  S.owned=Array.from(new Set([0,...S.owned.filter(v=>Number.isInteger(v)&&v>=0&&v<50)]));
+  if(!Array.isArray(S.prog)||S.prog.length!==3)S.prog=[1,0,0];
+  S.prog=S.prog.map((v,i)=>Math.max(i===0?1:0,Math.min(50,Number(v)||0)));
+  if(!S.owned.includes(S.car))S.car=0;
+  S.coins=Math.max(0,Number(S.coins)||0);
+  if(!S.stats||typeof S.stats!=='object')S.stats={};
+  S.stats={...STAT_DEFAULT,...S.stats};
+  if(st.get('stats',null)===null&&S.stars&&typeof S.stars==='object'){const old=Object.values(S.stars);S.stats.wins=old.length;S.stats.races=old.length;S.stats.perfect=old.filter(x=>x===3).length}
+  if(!S.upgrades||typeof S.upgrades!=='object')S.upgrades={};
+  if(!S.bestTimes||typeof S.bestTimes!=='object')S.bestTimes={};
+  if(!Array.isArray(S.achievements))S.achievements=[];
+  S.settings={controls:'buttons',quality:'high',vibrate:true,...(S.settings||{})};
+  if(!['buttons','swipe'].includes(S.settings.controls))S.settings.controls='buttons';
+  if(!['high','low'].includes(S.settings.quality))S.settings.quality='high';
+  const SAVE_KEYS=['coins','owned','car','prog','stars','sound','upgrades','achievements','stats','settings','bestTimes'];
+  function gameSnapshot(){const result={};for(const k of SAVE_KEYS)result[k]=JSON.parse(JSON.stringify(S[k]));return result}
+  const save=()=>{for(const k of SAVE_KEYS)st.set(k,S[k]); if(window.TurboCloud?.onLocalSave)window.TurboCloud.onLocalSave(gameSnapshot())};
+  function receiveCloudSave(raw){
+    if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Saqlov ma’lumotlari noto‘g‘ri');
+    const num=(v,min=0,max=1e9)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Number(v))):min;
+    S.coins=Math.floor(num(raw.coins));
+    S.owned=Array.from(new Set([0,...(Array.isArray(raw.owned)?raw.owned:[]).filter(v=>Number.isInteger(v)&&v>=0&&v<50)]));
+    S.car=S.owned.includes(raw.car)?raw.car:0;
+    S.prog=Array.from({length:3},(_,i)=>Math.floor(num(Array.isArray(raw.prog)?raw.prog[i]:0,i===0?1:0,50)));
+    S.stars={};if(raw.stars&&typeof raw.stars==='object')for(const [k,v] of Object.entries(raw.stars))if(/^[0-2]_(?:[0-9]|[1-4][0-9])$/.test(k))S.stars[k]=Math.floor(num(v,0,3));
+    S.sound=raw.sound!==false;
+    S.upgrades={};if(raw.upgrades&&typeof raw.upgrades==='object')for(const [id,u] of Object.entries(raw.upgrades))if(/^(?:[0-9]|[1-4][0-9])$/.test(id)&&u&&typeof u==='object'){
+      S.upgrades[id]={};for(const k of ['speed','accel','grip','nitro'])S.upgrades[id][k]=Math.floor(num(u[k],0,5));
+    }
+    S.achievements=Array.isArray(raw.achievements)?Array.from(new Set(raw.achievements.filter(v=>medals.some(m=>m.id===v)))):[];
+    S.stats={};for(const k of Object.keys(STAT_DEFAULT))S.stats[k]=Math.floor(num(raw.stats?.[k],0,1e12));
+    const ctrl=raw.settings?.controls,qual=raw.settings?.quality;
+    S.settings={controls:ctrl==='swipe'?'swipe':'buttons',quality:qual==='low'?'low':'high',vibrate:raw.settings?.vibrate!==false};
+    S.bestTimes={};if(raw.bestTimes&&typeof raw.bestTimes==='object')for(const [k,v] of Object.entries(raw.bestTimes))if(/^[0-2]_(?:[0-9]|[1-4][0-9])$/.test(k)&&Number.isFinite(Number(v))&&Number(v)>0)S.bestTimes[k]=num(v,0.01,1e8);
+    for(const k of SAVE_KEYS)st.set(k,S[k]);
+    applyQuality();renderTitle();if($('sMaps').classList.contains('show'))renderMaps();if($('sLevels').classList.contains('show'))renderLevels();if($('sGarage').classList.contains('show'))renderGarage();
+  }
+  window.TurboRacerBridge={read:gameSnapshot,apply:receiveCloudSave};
+  const fmtNum=v=>Math.floor(Number(v)||0).toLocaleString('en-US').replace(/,/g,' ');
+  const statCount=k=>S.stats[k]||0;
+  const medals=[
+    {id:'first',icon:'🏁',name:'Birinchi g‘alaba',desc:'1 ta levelni yakunlang',key:'wins',val:1,reward:150},
+    {id:'five',icon:'⚡',name:'Tezkor poygachi',desc:'5 ta leveldan o‘ting',key:'wins',val:5,reward:350},
+    {id:'twenty',icon:'🏎',name:'Chempionlik yo‘lida',desc:'20 ta g‘alaba',key:'wins',val:20,reward:650},
+    {id:'hundred',icon:'👑',name:'Afsona',desc:'100 ta g‘alaba',key:'wins',val:100,reward:2000},
+    {id:'collector',icon:'💎',name:'Kolleksioner',desc:'5 ta mashina yig‘ing',key:'cars',val:5,reward:250},
+    {id:'garage',icon:'🏆',name:'Katta garaj',desc:'20 ta mashinaga ega bo‘ling',key:'cars',val:20,reward:1000},
+    {id:'coin',icon:'🪙',name:'Tanga ovchisi',desc:'500 tanga yig‘ing (jami)',key:'coins',val:500,reward:250},
+    {id:'million',icon:'💰',name:'Boy poygachi',desc:'3000 tanga yig‘ing (jami)',key:'coins',val:3000,reward:700},
+    {id:'near',icon:'🎯',name:'Xavf ustasi',desc:'25 yaqin o‘tib ketish',key:'near',val:25,reward:450},
+    {id:'destroyer',icon:'💥',name:'Nishonga oluvchi',desc:'50 ta transportni yo‘q qiling',key:'kills',val:50,reward:500},
+    {id:'flawless',icon:'❤️',name:'Xatosiz haydovchi',desc:'3 ta 3-yulduzli g‘alaba',key:'perfect',val:3,reward:400},
+    {id:'marathon',icon:'🌍',name:'Marafonchi',desc:'100 000 metr yuring',key:'distance',val:100000,reward:900}
+  ];
+  function achProgress(a){return a.key==='cars'?S.owned.length:statCount(a.key)}
+  let toastTimer=0;
+  function toast(msg){const el=$('toast');if(!el)return;el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3100)}
+  function checkAchievements(){let gains=0;const names=[];
+    for(const a of medals)if(!S.achievements.includes(a.id)&&achProgress(a)>=a.val){S.achievements.push(a.id);S.coins+=a.reward;gains+=a.reward;names.push(a.name)}
+    if(names.length){save();toast('🏅 '+names.join(', ')+' · +'+fmtNum(gains)+' 🪙')}return gains}
+  function vibe(ms=35){if(S.settings.vibrate&&navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
+  const upsFor=id=>{const o=S.upgrades[id]||{};return {speed:Math.max(0,Math.min(5,o.speed|0)),accel:Math.max(0,Math.min(5,o.accel|0)),grip:Math.max(0,Math.min(5,o.grip|0)),nitro:Math.max(0,Math.min(5,o.nitro|0))}};
+  const tunedCar=c=>{const u=upsFor(c.id);return {...c,max:c.max+u.speed*9,acc:c.acc+u.accel*8,hand:c.hand+u.grip*.07,nit:c.nit+u.nitro*11}};
+  const upgradePrice=(id,key)=>{const u=upsFor(id);return Math.round(80*Math.pow(u[key]+1,1.65)*(1+id*.055))};
+  const prettyTime=t=>{const m=Math.floor(t/60),sec=(t%60).toFixed(1);return (m?m+':':'')+(m?sec.padStart(4,'0'):sec)+' s'};
+
+/* ================= 3 ta xarita (har biri o‘z rangi) ================= */
+const MAPS=[
+ {name:'Yashil vodiy',sub:'Daraxtlar, uylar, ochiq osmon',g1:'#3f8f35',g2:'#37802f',road:'#3d4048',line:'#f4f4f4',curb:['#d8232f','#f4f4f4'],decor:['tree','house','bush','tree','house'],night:0,grip:9,acc:'#7fd45f',rock:['#8d8d92','#5c5c62'],tc:['#7fd45f','#3f9a36','#276b25']},
+ {name:'Cho‘l yo‘li',sub:'Qum, kaktuslar, issiq quyosh',g1:'#e3bb70',g2:'#d6aa5c',road:'#4b4540',line:'#ffe58a',curb:['#c0392b','#f5e6c8'],decor:['cactus','rock','bush','cactus','rock'],night:0,grip:9,acc:'#f5b041',rock:['#b89458','#8a6a38'],tc:['#8cc66b','#5f9a45','#3f7030']},
+ {name:'Neon shahar',sub:'Tun, neon chiroqlar, binolar',g1:'#170c33',g2:'#130a2a',road:'#1d1e2e',line:'#ff4fd8',curb:['#ff2bd6','#27f3ff'],decor:['neon','house','lamp','neon','house'],night:.66,grip:8,acc:'#ff4fd8',rock:['#3a3050','#241d36'],tc:['#5b3ca8','#3a2377','#241450']}
+];
+
+/* ================= 50 ta level har xaritada ================= */
+function levelCfg(m,n){ // n = 0..49
+  return{
+    goal:Math.round(650+n*48+m*240),
+    dens:1+n*.02+m*.12,
+    enemy:n>=4?.03+n*.0045+m*.012:0,
+    hp:n>=30?3:n>=15?2:1,
+    cones:n>=3,
+    oil:n>=8||m===2,
+    rain:(n%5===4)||(m===1&&n%4===2),
+    night:m===2?.62:(n%9===8?.45:0)
+  };
+}
+
+/* ================= 50 ta mashina ================= */
+const SHAPES=['sedan','hatch','muscle','super','suv','formula','coupe','crossover','pickup','luxury','roadster','van'];
+const PRE=['Street','Turbo','Storm','Viper','Nova','Phantom','Blaze','Titan','Comet','Apex'];
+const SUF=['GT','RS','X','SR','Z'];
+// Zavod bo'yoqlari: oddiy neon o'rniga avtomobilga xos metallik ranglar.
+const AUTO_PAINTS=['#cd2229','#d8ab31','#729633','#24aa65','#1aa5b4','#2353aa',
+  '#8a2cb3','#b82757','#d65826','#d6c5a0','#202f3e','#f5f0e7',
+  '#354a67','#394c35','#c4cbd2','#aa142d','#7b8492','#e6b237',
+  '#144e5c','#8b1b25','#f4f1e8','#1e2733','#5173aa','#d35543',
+  '#424242','#59aeb3','#143d90','#afb1bb','#9b532e','#cbd3d8',
+  '#516b2f','#254d65','#a32748','#dee2e5','#2e323b','#b8a06a',
+  '#0f6463','#683e82','#c4272c','#f1f1e8','#3d8eaa','#333d4a',
+  '#436d46','#a86a26','#dcd8d0','#ba3550','#253955','#707d8a',
+  '#5b4335','#c7cdd2'];
+const CARS=Array.from({length:50},(_,i)=>{
+  const t=i/49;
+  return{id:i,name:PRE[i%10]+' '+SUF[Math.floor(i/10)]+' #'+(i+1),
+    shape:SHAPES[i%SHAPES.length],h:(i*47)%360,paint:AUTO_PAINTS[i],stripe:i%11===3?'#ecebee':i%13===6?'#151923':null,spoiler:i%7===3||i%12===5,variant:Math.floor(i/SHAPES.length),
+    max:170+t*110,acc:52+t*52,hand:1+t*.45,nit:50+t*40,
+    price:i===0?0:Math.round(60+i*i*1.6)};
+});
+
+/* ================= YANGI: avto studiya 2.5D, 12 turdagi kuzov ================= */
+// Top-down real avtomobil konturlari — sprite, internet yoki qo'shimcha fayl kerak emas.
+const SH={
+ sedan:    {w:47,h:99,nw:36,tw:39,cab:[-.23,.24],wh:[.29,.31]},
+ hatch:    {w:46,h:85,nw:35,tw:40,cab:[-.24,.32],wh:[.29,.27]},
+ muscle:   {w:53,h:100,nw:41,tw:44,cab:[-.08,.25],wh:[.30,.32]},
+ super:    {w:54,h:103,nw:33,tw:44,cab:[-.03,.32],wh:[.32,.32]},
+ suv:      {w:53,h:105,nw:43,tw:47,cab:[-.29,.34],wh:[.33,.31]},
+ formula:  {w:38,h:104,nw:18,tw:30,cab:[-.15,.17],wh:[.26,.33]},
+ coupe:    {w:49,h:98,nw:35,tw:41,cab:[-.12,.30],wh:[.28,.33]},
+ crossover:{w:52,h:100,nw:42,tw:45,cab:[-.28,.33],wh:[.30,.30]},
+ pickup:   {w:53,h:109,nw:43,tw:47,cab:[-.23,.05],wh:[.29,.33]},
+ luxury:   {w:51,h:111,nw:40,tw:43,cab:[-.17,.24],wh:[.31,.32]},
+ roadster: {w:50,h:93,nw:32,tw:43,cab:[-.05,.30],wh:[.31,.33]},
+ van:      {w:51,h:106,nw:43,tw:48,cab:[-.32,.37],wh:[.30,.34]},
+ taxi:     {w:47,h:99,nw:36,tw:39,cab:[-.23,.24],wh:[.29,.31]},
+ truck:    {w:54,h:158}
+};
+const cv=$('game'),ctx=cv.getContext('2d');
+let RES=S.settings.quality==='low'?1:2;
+function applyQuality(){RES=S.settings.quality==='low'?1:2;cv.width=W*RES;cv.height=H*RES;cv.style.imageRendering='auto';}
+applyQuality();
+const dark=document.createElement('canvas');dark.width=W;dark.height=H;const dctx=dark.getContext('2d');
+
+function rr(c,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);
+  c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
+}
+function flame(c,x,y,len,wd){
+  const g=c.createLinearGradient(0,y,0,y+len);
+  g.addColorStop(0,'rgba(230,255,255,.98)');g.addColorStop(.32,'rgba(70,168,255,.82)');g.addColorStop(1,'rgba(60,60,255,0)');
+  c.fillStyle=g;c.beginPath();c.moveTo(x-wd,y);c.quadraticCurveTo(x,y+len*1.1,x+wd,y);c.closePath();c.fill();
+}
+function bodyPath(c,Sx){
+  const w=Sx.w,h=Sx.h,nw=Sx.nw,tw=Sx.tw;
+  c.beginPath();c.moveTo(-nw/2,-h/2+2);
+  c.quadraticCurveTo(-nw/2-2,-h/2-1,-nw*.23,-h/2);
+  c.lineTo(nw*.23,-h/2);c.quadraticCurveTo(nw/2+2,-h/2+1,nw/2,-h/2+5);
+  c.bezierCurveTo(w*.50,-h*.40,w*.5,-h*.22,w*.5,-h*.1);
+  c.lineTo(w*.5,h*.26);c.bezierCurveTo(w*.5,h*.42,tw*.5+2,h*.47,tw*.5-2,h*.5);
+  c.quadraticCurveTo(0,h*.51,-tw*.5+2,h*.5);
+  c.bezierCurveTo(-tw*.5-2,h*.47,-w*.5,h*.42,-w*.5,h*.26);
+  c.lineTo(-w*.5,-h*.1);c.bezierCurveTo(-w*.5,-h*.22,-w*.5,-h*.40,-nw/2,-h/2+5);c.closePath();
+}
+function poly(c,points){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();}
+function carMetal(c,base,w){
+  const g=c.createLinearGradient(-w/2,0,w/2,0);
+  g.addColorStop(0,shadeHex(base,-.57));g.addColorStop(.08,shadeHex(base,-.23));
+  g.addColorStop(.23,shadeHex(base,.11));g.addColorStop(.43,shadeHex(base,.32));
+  g.addColorStop(.55,shadeHex(base,.20));g.addColorStop(.78,shadeHex(base,-.01));
+  g.addColorStop(.92,shadeHex(base,-.31));g.addColorStop(1,shadeHex(base,-.60));return g;
+}
+function glassMetal(c,x,y,w,h){
+  const g=c.createLinearGradient(x,y,x+w,y+h);
+  g.addColorStop(0,'#a0b8c5');g.addColorStop(.13,'#59758c');g.addColorStop(.30,'#20394e');
+  g.addColorStop(.53,'#0e1a2a');g.addColorStop(.80,'#25384c');g.addColorStop(1,'#080e18');return g;
+}
+// Mashinalarning bo'yi 14% uzunroq (eni o'zgarmaydi).
+// Bitta koeffitsient garaj, kolleksiya va poygada bir xil ishlaydi.
+const CAR_LENGTH=1.14;
+function drawCar(c,x,y,o,p){
+  p=p||{};c.save();c.translate(x,y);if(p.angle)c.rotate(p.angle);c.scale(1,CAR_LENGTH);if(p.alpha!=null)c.globalAlpha*=p.alpha;
+  const sh=SH[o.shape]||SH.sedan;
+  if(o.shape==='truck')drawTruck(c,o,p);
+  else if(o.shape==='formula')drawF1(c,o,p);
+  else drawSedanish(c,o,p,sh);
+  c.restore();
+}
+function drawWheels(c,Sx,o){
+  const w=Sx.w,h=Sx.h;
+  for(const side of[-1,1])for(const ay of[-Sx.wh[0],Sx.wh[1]]){
+    let wx=side*(w*.49+1),wy=ay*h;
+    c.fillStyle='#070b10';rr(c,wx-5.5,wy-13,11,26,3.4);c.fill();
+    c.fillStyle='#28303a';rr(c,wx-4.5,wy-10,9,20,2);c.fill();
+    c.fillStyle='#0b1017';rr(c,wx-3.7,wy-8.5,7.4,17,2);c.fill();
+    c.fillStyle='#a4b0b9';rr(c,wx-1.5,wy-5,3,10,1.4);c.fill();
+    c.fillStyle='rgba(255,255,255,.22)';c.fillRect(wx-4,wy-10,1.2,20);
+  }
+}
+function drawSedanish(c,o,p,Sx){
+  const w=Sx.w,h=Sx.h,base=o.paint||cl(o.h||0,41,66);
+  const front=-h/2,rear=h/2,y0=Sx.cab[0]*h,y1=Sx.cab[1]*h,dy=y1-y0;
+  const sport=['super','muscle','coupe','roadster'].includes(o.shape);
+  const tall=['suv','van','crossover'].includes(o.shape);
+  // Yerga tushgan yumshoq soya va g'ildirak arkalari.
+  c.fillStyle='rgba(0,0,0,.22)';c.beginPath();c.ellipse(6,9,w*.69,h*.55,-.02,0,TAU);c.fill();
+  c.fillStyle='rgba(0,0,0,.36)';c.beginPath();c.ellipse(3,6,w*.56,h*.515,0,0,TAU);c.fill();
+  drawWheels(c,Sx,o);
+  bodyPath(c,Sx);c.fillStyle=carMetal(c,base,w);c.fill();
+  c.strokeStyle='rgba(0,0,0,.87)';c.lineWidth=1.65;c.stroke();
+  // Kuzov chuqurligi, kapot/trunk metallik nurlari.
+  c.save();bodyPath(c,Sx);c.clip();
+  const vg=c.createLinearGradient(0,front,0,rear);
+  vg.addColorStop(0,'rgba(255,255,255,.29)');vg.addColorStop(.11,'rgba(255,255,255,.04)');
+  vg.addColorStop(.36,'rgba(0,0,0,.17)');vg.addColorStop(.56,'rgba(255,255,255,.045)');
+  vg.addColorStop(.87,'rgba(0,0,0,.13)');vg.addColorStop(1,'rgba(0,0,0,.42)');
+  c.fillStyle=vg;c.fillRect(-w/2,front,w,h);
+  // Avtomobil uzunligi bo'ylab yorug' metall chiziqlar.
+  const stripe=c.createLinearGradient(-w*.5,0,w*.5,0);
+  stripe.addColorStop(0,'rgba(255,255,255,.0)');stripe.addColorStop(.24,'rgba(255,255,255,.26)');
+  stripe.addColorStop(.29,'rgba(255,255,255,.045)');stripe.addColorStop(.7,'rgba(255,255,255,.12)');stripe.addColorStop(1,'rgba(0,0,0,.19)');
+  c.fillStyle=stripe;c.fillRect(-w*.5,front,w,h);
+  // Kapot qovurg'alari.
+  c.strokeStyle='rgba(255,255,255,.30)';c.lineWidth=.75;
+  for(const side of[-1,1]){
+    c.beginPath();c.moveTo(side*w*.21,front+10);c.quadraticCurveTo(side*w*.30,(front+y0)*.5,side*w*.28,y0-5);c.stroke();
+    c.strokeStyle='rgba(0,0,0,.15)';c.beginPath();c.moveTo(side*w*.26,front+11);c.lineTo(side*w*.31,y0-5);c.stroke();
+    c.strokeStyle='rgba(255,255,255,.30)';
+  }
+  // Kapot va yukxona qopqog'i tutashmalari.
+  c.strokeStyle='rgba(8,11,18,.42)';c.lineWidth=.9;
+  c.beginPath();c.moveTo(-w*.40,y0-4);c.quadraticCurveTo(0,y0+1,w*.40,y0-4);c.stroke();
+  c.beginPath();c.moveTo(-w*.40,y1+5);c.quadraticCurveTo(0,y1+2,w*.40,y1+5);c.stroke();
+  // Sportga xos yopiq havo panjaralari.
+  if(o.shape==='muscle'||o.shape==='super'){
+    c.fillStyle='rgba(8,12,17,.64)';rr(c,-8,front+13,16,sport?18:12,4);c.fill();
+    c.strokeStyle='rgba(255,255,255,.26)';c.lineWidth=1;
+    for(let j=0;j<3;j++){c.beginPath();c.moveTo(-5,front+18+j*4);c.lineTo(5,front+18+j*4);c.stroke()}
+  }
+  if(o.shape==='super'){
+    c.fillStyle='rgba(5,11,18,.80)';for(const side of[-1,1]){
+      poly(c,[[side*16,rear-30],[side*22,rear-25],[side*20,rear-12],[side*13,rear-14]]);c.fill();
+    }
+  }
+  if(o.stripe){
+    c.globalAlpha=.80;c.fillStyle=o.stripe;
+    c.fillRect(-5,front,3,h);c.fillRect(2,front,3,h);
+    c.globalAlpha=1;
+  }
+  c.restore();
+  // Yon ko'zgular: qattiq korpus va oynalar.
+  for(const side of[-1,1]){
+    c.fillStyle='#141a24';rr(c,side*(w*.50)-4.7,y0+dy*.24,9.4,9,3);c.fill();
+    c.fillStyle=shadeHex(base,.10);rr(c,side*(w*.53)-3.2,y0+dy*.24,6.4,6,2);c.fill();
+    c.fillStyle='#8aabbc';c.fillRect(side*(w*.53)-1.1,y0+dy*.25,2.2,3.8);
+  }
+  // Kabina po'lat konturi, old/ortki shamol oynasi va tom.
+  const cabW=tall?w*.81:w*.77;
+  const fw=cabW*.80,rw=cabW*.88;
+  poly(c,[[-fw/2,y0],[-cabW*.53,y0+dy*.17],[-cabW*.53,y1-dy*.22],[-rw/2,y1],
+          [rw/2,y1],[cabW*.53,y1-dy*.22],[cabW*.53,y0+dy*.17],[fw/2,y0]]);
+  c.fillStyle='#131b27';c.fill();c.strokeStyle='rgba(235,242,255,.33)';c.lineWidth=1.1;c.stroke();
+  // Old shisha, haqiqiy ko'zgu nuri, oyna artgichlar.
+  let ws=glassMetal(c,-fw/2,y0,fw,dy*.38);
+  poly(c,[[-fw*.45,y0+1],[fw*.45,y0+1],[cabW*.47,y0+dy*.32],[-cabW*.47,y0+dy*.32]]);
+  c.fillStyle=ws;c.fill();
+  c.save();c.clip();
+  c.fillStyle='rgba(223,245,255,.27)';poly(c,[[-fw*.34,y0+1],[-fw*.12,y0+1],[-fw*.29,y0+dy*.31],[-fw*.41,y0+dy*.31]]);c.fill();
+  c.fillStyle='rgba(151,201,232,.12)';poly(c,[[fw*.11,y0+1],[fw*.22,y0+1],[cabW*.31,y0+dy*.31],[cabW*.18,y0+dy*.31]]);c.fill();
+  c.restore();
+  c.strokeStyle='rgba(0,0,0,.72)';c.lineWidth=1.1;
+  for(const side of[-1,1]){
+    c.beginPath();c.moveTo(side*fw*.06,y0+dy*.31);c.lineTo(side*fw*.40,y0+dy*.26);c.stroke();
+  }
+  // Tomga metallik effekt, keng panoramali tom varianti.
+  const roofTop=y0+dy*.34,roofBot=y0+dy*.75;
+  let roofg=c.createLinearGradient(-cabW*.4,0,cabW*.4,0);
+  roofg.addColorStop(0,shadeHex(base,-.52));roofg.addColorStop(.23,shadeHex(base,-.04));
+  roofg.addColorStop(.49,shadeHex(base,.26));roofg.addColorStop(.78,shadeHex(base,-.02));roofg.addColorStop(1,shadeHex(base,-.54));
+  poly(c,[[-cabW*.48,roofTop],[cabW*.48,roofTop],[cabW*.46,roofBot],[-cabW*.46,roofBot]]);
+  c.fillStyle=roofg;c.fill();
+  if(['luxury','suv','crossover','van'].includes(o.shape)){
+    c.fillStyle='#111e2d';rr(c,-cabW*.30,roofTop+3,cabW*.60,(roofBot-roofTop)-6,3);c.fill();
+    c.fillStyle='rgba(168,219,247,.24)';rr(c,-cabW*.28,roofTop+4,cabW*.23,(roofBot-roofTop)-8,2);c.fill();
+    c.strokeStyle='#5f7389';c.lineWidth=.8;c.strokeRect(-cabW*.29,roofTop+3,cabW*.58,roofBot-roofTop-6);
+  }else{
+    c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=1;
+    c.beginPath();c.moveTo(-cabW*.19,roofTop+2);c.lineTo(-cabW*.16,roofBot-1);c.stroke();
+  }
+  // Yon oynalarni 2 eshikli / 4 eshikli shaklda chizish.
+  for(const side of[-1,1]){
+    c.fillStyle='#0a111b';
+    poly(c,[[side*cabW*.53,y0+dy*.20],[side*cabW*.51,roofTop-2],
+      [side*cabW*.51,roofBot+2],[side*cabW*.52,y1-dy*.23]]);c.fill();
+    c.strokeStyle='rgba(153,191,204,.60)';c.lineWidth=.8;
+    c.beginPath();c.moveTo(side*cabW*.53,y0+dy*.33);c.lineTo(side*cabW*.51,roofBot-1);c.stroke();
+    // Eshik va uning tutqichi.
+    c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=.9;
+    c.beginPath();c.moveTo(side*w*.43,y0+dy*.62);c.lineTo(side*w*.44,y1+10);c.stroke();
+    c.fillStyle='rgba(0,0,0,.58)';rr(c,side*w*.42-2.4,y0+dy*.67,4.8,7.5,1);c.fill();
+    c.fillStyle='rgba(255,255,255,.70)';c.fillRect(side*w*.42-1.3,y0+dy*.67+1,2.6,4.5);
+  }
+  // Orqa oynaning reflekslari.
+  poly(c,[[-cabW*.45,roofBot+1],[cabW*.45,roofBot+1],[rw*.48,y1-1],[-rw*.48,y1-1]]);
+  c.fillStyle=glassMetal(c,-fw/2,roofBot,fw,y1-roofBot);c.fill();
+  c.fillStyle='rgba(181,224,244,.14)';poly(c,[[-cabW*.36,roofBot+2],[-cabW*.08,roofBot+2],[-rw*.17,y1-2],[-rw*.39,y1-2]]);c.fill();
+  // Pikap kuzovi: yukxona to'rtburchak, burmali metall bortlar.
+  if(o.shape==='pickup'){
+    const by=y1+4,bh=Math.max(4,rear-by-6);
+    c.fillStyle='#17202a';rr(c,-w*.42,by,w*.84,bh,2);c.fill();
+    c.fillStyle=shadeHex(base,-.25);rr(c,-w*.32,by+3,w*.64,bh-6,2);c.fill();
+    c.strokeStyle='rgba(0,0,0,.42)';c.lineWidth=1;
+    for(let j=-2;j<=2;j++){c.beginPath();c.moveTo(j*w*.10,by+4);c.lineTo(j*w*.10,by+bh-3);c.stroke();}
+  }
+  // SUV yuk ortadigan tom relslari.
+  if(['suv','crossover','van'].includes(o.shape)){
+    c.strokeStyle='#d5dbe2';c.lineWidth=2.2;
+    for(const side of[-1,1]){
+      c.beginPath();c.moveTo(side*w*.40,y0+5);c.lineTo(side*w*.42,y1-3);c.stroke();
+      c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=.8;
+      c.beginPath();c.moveTo(side*w*.38,y0+5);c.lineTo(side*w*.40,y1-3);c.stroke();
+      c.strokeStyle='#d5dbe2';c.lineWidth=2.2;
+    }
+  }
+  // Old bamper, kondensator panjarasi va ikkita faraning tayyor detallari.
+  c.fillStyle='#171e24';rr(c,-w*.31,front+4,w*.62,5,2);c.fill();
+  c.fillStyle='rgba(150,166,174,.85)';c.fillRect(-w*.14,front+5,w*.28,1.5);
+  c.fillStyle='#091116';rr(c,-w*.21,front+11,w*.42,6,2);c.fill();
+  c.strokeStyle='rgba(155,168,184,.65)';c.lineWidth=.8;
+  for(let j=-2;j<=2;j++){c.beginPath();c.moveTo(j*3,front+12);c.lineTo(j*3,front+16);c.stroke();}
+  for(const side of[-1,1]){
+    // Old LED chiroqlar.
+    c.save();c.translate(side*(w*.34),front+9);c.scale(side,1);
+    poly(c,[[-6,-3],[3,-2],[7,2],[6,5],[-5,3]]);c.fillStyle='#19232e';c.fill();
+    poly(c,[[-5,-2],[2,-1],[6,2],[1,2],[-5,1]]);c.fillStyle='#e8faff';c.fill();
+    c.strokeStyle='rgba(81,197,255,.85)';c.lineWidth=1.3;
+    c.beginPath();c.moveTo(-5,1);c.lineTo(5,2);c.stroke();c.restore();
+    c.fillStyle='#f4a22c';rr(c,side*w*.42-1.8,front+12,3.6,3,1);c.fill();
+  }
+  // Orqa katta LED stop-panellar.
+  for(const side of[-1,1]){
+    c.save();c.translate(side*(w*.34),rear-8);c.scale(side,1);
+    poly(c,[[-5,-3],[6,-4],[7,4],[-6,4]]);c.fillStyle='#45090b';c.fill();
+    c.fillStyle=p.brake?'#ff5151':'#e02a32';rr(c,-4,-2,10,4,1);c.fill();
+    c.fillStyle='rgba(255,240,235,.83)';c.fillRect(2,-1,3,1.5);c.restore();
+  }
+  c.fillStyle='#c1cbd0';rr(c,-7,rear-6,14,3.5,1);c.fill();
+  c.fillStyle='#1b222d';c.fillRect(-4,rear-5.3,8,1.5);
+  // Egzoz chiqishlari, difuzor.
+  if(sport){c.fillStyle='#101820';rr(c,-w*.37,rear-3,w*.74,2.8,1);c.fill();
+    for(const side of[-1,1]){c.fillStyle='#a5b7ba';rr(c,side*w*.19-3,rear-2,6,3,1);c.fill();}}
+  // Spoyler 3D: oddiy bitta chiziq emas, oyoq va qoplama.
+  if(o.spoiler){
+    c.fillStyle='#111722';for(const side of[-1,1])rr(c,side*w*.28-2,rear-15,4,9,1),c.fill();
+    c.fillStyle=shadeHex(base,-.40);rr(c,-w*.54,rear-14,w*1.08,8,2.7);c.fill();
+    c.fillStyle='rgba(255,255,255,.35)';c.fillRect(-w*.51,rear-13,w*1.02,1.5);
+    c.fillStyle='#09111b';c.fillRect(-w*.52,rear-7,w*1.04,1.5);
+  }
+  // Burilish chiroqlari va nitro animatsiyasi.
+  if(p.blink&&Date.now()%500<250){c.fillStyle='#ffb43c';for(const y of[front+11,rear-11]){
+    c.beginPath();c.arc(p.blink*(w*.45),y,3.6,0,TAU);c.fill();}}
+  if(p.boost){c.save();c.globalCompositeOperation='lighter';for(const sx of[-1,1])flame(c,sx*w*.20,rear-1,22+Math.random()*24,5);c.restore();}
+}
+function drawTruck(c,o,p){
+  const Sx=SH.truck,w=Sx.w,h=Sx.h,base=o.paint||cl(o.h||20,41,55);
+  c.fillStyle='rgba(0,0,0,.33)';c.beginPath();c.ellipse(6,9,w*.66,h*.54,0,0,TAU);c.fill();
+  c.fillStyle='#11141a';for(const sx of[-1,1])for(const wy of[-.34,.19,.35]){rr(c,sx*w/2-5.8,wy*h-12,11.6,24,3);c.fill()}
+  c.fillStyle=carMetal(c,base,w);rr(c,-w/2,-h/2+45,w,h-45,4);c.fill();
+  c.strokeStyle='rgba(0,0,0,.42)';c.lineWidth=1.3;for(let yy=-h/2+57;yy<h/2-4;yy+=15){c.beginPath();c.moveTo(-w/2+2,yy);c.lineTo(w/2-2,yy);c.stroke()}
+  const cg=c.createLinearGradient(-w/2,0,w/2,0);cg.addColorStop(0,shadeHex(base,-.52));cg.addColorStop(.4,shadeHex(base,.3));cg.addColorStop(1,shadeHex(base,-.5));
+  c.fillStyle=cg;rr(c,-w/2+2,-h/2,w-4,51,7);c.fill();
+  c.fillStyle=glassMetal(c,-w*.34,-h/2,w*.68,20);poly(c,[[-w*.32,-h/2+8],[w*.32,-h/2+8],[w*.38,-h/2+28],[-w*.38,-h/2+28]]);c.fill();
+  c.fillStyle='rgba(255,255,255,.30)';poly(c,[[-w*.24,-h/2+9],[-w*.12,-h/2+9],[-w*.20,-h/2+27],[-w*.31,-h/2+27]]);c.fill();
+  c.fillStyle='#c1cfda';rr(c,-w*.26,-h/2+1,w*.52,4,1);c.fill();
+  for(const sx of[-1,1]){c.fillStyle='#e6f6ff';rr(c,sx*19-5,-h/2+4,10,5,2);c.fill();c.fillStyle='#ef343c';rr(c,sx*19-5,h/2-7,10,4,1);c.fill()}
+}
+function drawF1(c,o,p){
+  const h=104,w=40,base=o.paint||cl(o.h||0,42,70);
+  c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(4,7,28,h*.55,0,0,TAU);c.fill();
+  c.fillStyle='#090d12';for(const sx of[-1,1])for(const [y,wheelW,wheelH] of [[-h*.30,12,25],[h*.31,14,27]]){
+    rr(c,sx*22-wheelW/2,y-wheelH/2,wheelW,wheelH,4);c.fill();
+    c.fillStyle='#5f6876';c.fillRect(sx*22-1.4,y-wheelH*.24,2.8,wheelH*.48);c.fill();c.fillStyle='#090d12';}
+  // Old qanot, aerodinamik old burun.
+  c.fillStyle=shadeHex(base,-.22);rr(c,-26,-h/2+2,52,8,2);c.fill();
+  c.fillStyle='#0a1018';rr(c,-26,-h/2+7,52,3,1);c.fill();
+  c.beginPath();c.moveTo(-4,-h/2+5);c.lineTo(4,-h/2+5);c.lineTo(7,-h*.29);c.lineTo(15,-h*.14);
+  c.lineTo(17,h*.07);c.lineTo(11,h*.37);c.lineTo(10,h/2-10);c.lineTo(-10,h/2-10);c.lineTo(-11,h*.37);
+  c.lineTo(-17,h*.07);c.lineTo(-15,-h*.14);c.lineTo(-7,-h*.29);c.closePath();
+  c.fillStyle=carMetal(c,base,w);c.fill();c.strokeStyle='#101825';c.lineWidth=1.7;c.stroke();
+  // Pilot kabinasi, halo xavfsizlik konstruktsiyasi.
+  c.fillStyle='#09131d';c.beginPath();c.ellipse(0,0,9,16,0,0,TAU);c.fill();
+  c.fillStyle='#273a4c';c.beginPath();c.ellipse(0,1,5.8,10,0,0,TAU);c.fill();
+  c.strokeStyle='#c0cbd3';c.lineWidth=2.3;c.beginPath();c.moveTo(-9,-7);c.lineTo(0,-15);c.lineTo(9,-7);c.stroke();
+  c.strokeStyle='#16212d';c.lineWidth=2;c.beginPath();c.moveTo(0,-15);c.lineTo(0,8);c.stroke();
+  // Yon ventilyatsiya kanallari va orqa motor qopqog'i.
+  c.fillStyle='#0a121b';for(const side of[-1,1]){poly(c,[[side*12,6],[side*16,11],[side*12,30],[side*8,25]]);c.fill();}
+  c.strokeStyle='rgba(255,255,255,.28)';c.lineWidth=1;
+  c.beginPath();c.moveTo(-6,16);c.lineTo(-5,39);c.moveTo(6,16);c.lineTo(5,39);c.stroke();
+  c.fillStyle='#171d27';rr(c,-23,h/2-14,46,12,2);c.fill();
+  c.fillStyle=shadeHex(base,-.18);rr(c,-24,h/2-14,48,5,1);c.fill();
+  c.fillStyle=p.brake?'#ff4a51':'#c22134';c.fillRect(-5,h/2-9,10,3);
+  if(p.boost){c.save();c.globalCompositeOperation='lighter';flame(c,0,h/2-5,28+Math.random()*30,6);c.restore();}
+}
+
+/* ================= audio ================= */
+let AC=null,noiseBuf=null,engO=null,engG=null;
+function initAudio(){
+  if(AC){if(AC.state==='suspended')AC.resume();return}
+  try{const A=window.AudioContext||window.webkitAudioContext;AC=new A();
+    engO=AC.createOscillator();engO.type='sawtooth';const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=500;
+    engG=AC.createGain();engG.gain.value=0;engO.connect(f);f.connect(engG);engG.connect(AC.destination);engO.start();
+    noiseBuf=AC.createBuffer(1,AC.sampleRate*.5,AC.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
+  }catch(e){AC=null}
+}
+function beep(f,d,type,v,f2){if(!AC||!S.sound)return;const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'square';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(v||.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02)}
+function boom(){if(!AC||!S.sound||!noiseBuf)return;const s=AC.createBufferSource();s.buffer=noiseBuf;const g=AC.createGain();g.gain.value=.5;
+  const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=900;s.connect(f);f.connect(g);g.connect(AC.destination);s.start();beep(120,.25,'sawtooth',.1,40)}
+function engineSound(){if(!AC)return;const on=mode==='play'&&S.sound&&P&&!G.dead;const t=AC.currentTime;
+  engG.gain.setTargetAtTime(on?.03:0,t,.08);if(on)engO.frequency.setTargetAtTime(46+P.speed*.42+(P.boost?24:0),t,.06)}
+
+/* ================= holat ================= */
+let mode='title',mapIdx=0,lvlIdx=0,cfg=null,L=MAPS[0];
+let P=null,G={},traffic=[],items=[],statics=[],parts=[],pops=[],bullets=[],D=[],LG=[],rain=[];
+const MP={active:false,room:'',startAt:0,seed:0,role:'host',obstacles:[],hit:new Set(),peer:null,peerX:240,done:false,started:false,reporting:false,ended:false,readyAt:0};
+let dist=0,off=0,score=0,runCoins=0,shake=0,time=0;
+const keys={l:0,r:0,b:0,n:0,f:0};
+const touch={down:false,x0:0,y0:0,x:0,y:0};
+let fireReq=false;
+let gIdx=Math.max(0,S.car);
+const specksG=Array.from({length:120},()=>({x:Math.random()<.5?rnd(0,RL-8):rnd(RR+8,W),y:rnd(0,H),r:rnd(1,2.6),a:rnd(.05,.16)}));
+const specksR=Array.from({length:170},()=>({x:rnd(RL+8,RR-8),y:rnd(0,H),r:rnd(.6,1.6),a:rnd(.05,.14)}));
+
+/* ================= dekor ================= */
+function spawnDecor(y){
+  for(const side of[-1,1]){
+    if(Math.random()>.9)continue;
+    const t=pick(L.decor);let s=20,x=side<0?rnd(8,RL-14):rnd(RR+14,W-8),c=L.tc||['#7fd45f','#3f9a36','#276b25'];
+    if(t==='tree')s=rnd(22,32);
+    else if(t==='cactus')s=rnd(14,20);
+    else if(t==='rock')s=rnd(12,22);
+    else if(t==='bush')s=rnd(10,16);
+    else if(t==='house'){s=rnd(22,30);x=side<0?rnd(26,RL-34):rnd(RR+34,W-26);c=pick(['#b5483a','#8a5a44','#6d7b8a','#a3844f','#7c4a5a'])}
+    else if(t==='lamp'){s=1;x=side<0?RL-16:RR+16}
+    else if(t==='neon'){s=1;x=side<0?RL-16:RR+16;c=pick(['#ff2bd6','#27f3ff','#a855ff','#ffe600'])}
+    D.push({t,x,y,s,v:Math.random(),side,c});
+  }
+}
+function drawDecor(d){
+  const c=ctx,x=d.x,y=d.y,s=d.s,v=d.v;
+  switch(d.t){
+  case'tree':{
+    c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(x+7,y+9,s*.95,s*.85,0,0,TAU);c.fill();
+    for(let i=0;i<3;i++){const a=i*2.1+v*6,rx=x+Math.cos(a)*s*.32,ry=y+Math.sin(a)*s*.32;
+      const g=c.createRadialGradient(rx-s*.2,ry-s*.2,2,rx,ry,s*.7);g.addColorStop(0,d.c[0]);g.addColorStop(.6,d.c[1]);g.addColorStop(1,d.c[2]);
+      c.fillStyle=g;c.beginPath();c.arc(rx,ry,s*.68,0,TAU);c.fill()}
+    break}
+  case'bush':{
+    c.fillStyle='rgba(0,0,0,.22)';c.beginPath();c.ellipse(x+4,y+5,s,s*.85,0,0,TAU);c.fill();
+    for(let i=0;i<3;i++){const a=i*2.1+v*5;c.fillStyle=i?d.c[1]:d.c[0];c.beginPath();c.arc(x+Math.cos(a)*s*.4,y+Math.sin(a)*s*.4,s*.6,0,TAU);c.fill()}
+    break}
+  case'cactus':{
+    c.fillStyle='rgba(0,0,0,.2)';c.beginPath();c.ellipse(x+5,y+6,s*.9,s*.8,0,0,TAU);c.fill();c.lineCap='round';
+    for(let i=0;i<3;i++){const a=v*6+i*2.1;c.strokeStyle='#3f8a3b';c.lineWidth=s*.42;c.beginPath();c.moveTo(x,y);c.lineTo(x+Math.cos(a)*s*.8,y+Math.sin(a)*s*.8);c.stroke();
+      c.strokeStyle='#6cc060';c.lineWidth=s*.14;c.stroke()}
+    c.fillStyle='#4d9b46';c.beginPath();c.arc(x,y,s*.45,0,TAU);c.fill();c.fillStyle='#ff7aa8';c.beginPath();c.arc(x,y,s*.14,0,TAU);c.fill();
+    break}
+  case'rock':{
+    const rc=L.rock;
+    c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(x+5,y+6,s,s*.85,0,0,TAU);c.fill();
+    c.beginPath();for(let i=0;i<8;i++){const a=i*TAU/8,r=s*(.75+.25*Math.sin(i*2.3+v*10));const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;i?c.lineTo(px,py):c.moveTo(px,py)}c.closePath();
+    const g=c.createRadialGradient(x-s*.3,y-s*.3,2,x,y,s);g.addColorStop(0,rc[0]);g.addColorStop(1,rc[1]);c.fillStyle=g;c.fill();
+    break}
+  case'house':{
+    const w=s*2,h=s*2.4;
+    c.fillStyle='rgba(0,0,0,.28)';rr(c,x-w/2+7,y-h/2+8,w,h,4);c.fill();
+    if(L.bld||MAPS[mapIdx].night){c.fillStyle='#1b1233';rr(c,x-w/2,y-h/2,w,h,4);c.fill();c.strokeStyle=pick2(d.v);c.lineWidth=2;rr(c,x-w/2+2,y-h/2+2,w-4,h-4,3);c.stroke();
+      c.fillStyle='#2e2152';c.fillRect(x-w/4,y-h/4,w/2,h/3);LG.push({x,y,r:w*1.3,c:'255,120,220',a:.25})}
+    else{c.fillStyle=d.c;rr(c,x-w/2,y-h/2,w/2,h,3);c.fill();c.fillStyle=d.c;c.globalAlpha=.75;rr(c,x,y-h/2,w/2,h,3);c.fill();c.globalAlpha=1;
+      c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=2;c.beginPath();c.moveTo(x,y-h/2);c.lineTo(x,y+h/2);c.stroke();
+      c.fillStyle='#555';c.fillRect(x+w*.12,y-h*.28,7,7)}
+    break}
+  case'lamp':case'neon':{
+    const dx=d.side<0?1:-1;
+    c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=4;c.beginPath();c.moveTo(x+4,y+4);c.lineTo(x+dx*22+4,y+4);c.stroke();
+    c.strokeStyle='#2b2f3a';c.lineWidth=3;c.beginPath();c.moveTo(x,y);c.lineTo(x+dx*22,y);c.stroke();
+    c.fillStyle='#1d212b';c.beginPath();c.arc(x,y,5,0,TAU);c.fill();
+    if(d.t==='lamp'){c.fillStyle='#ffe4a8';c.beginPath();c.arc(x+dx*22,y,5,0,TAU);c.fill();LG.push({x:x+dx*22,y,r:95,c:'255,214,140',a:.5})}
+    else{c.save();c.globalCompositeOperation='lighter';c.fillStyle=d.c;rr(c,x+dx*22-3,y-18,6,36,3);c.fill();c.restore();LG.push({x:x+dx*22,y,r:95,c:hex(d.c),a:.6})}
+    break}
+  }
+}
+function hex(h){const n=parseInt(h.replace('#',''),16);return[n>>16&255,n>>8&255,n&255].join(',')}
+function pick2(v){return['#ff2bd6','#27f3ff','#a855ff','#ffe600'][Math.floor(v*4)%4]}
+
+/* ================= yo‘l va fon ================= */
+function drawRoad(){
+  const c=ctx;
+  c.fillStyle=L.g1;c.fillRect(0,0,W,H);
+  c.fillStyle=L.g2;const bh=90,o=off%(bh*2);for(let y=-bh*2+o;y<H;y+=bh*2)c.fillRect(0,y,W,bh);
+  for(const s of specksG){c.fillStyle='rgba(0,0,0,'+s.a+')';c.fillRect(s.x,(s.y+off)%H,s.r,s.r)}
+  const rg=c.createLinearGradient(RL,0,RR,0);rg.addColorStop(0,shadeHex(L.road,-.25));rg.addColorStop(.5,L.road);rg.addColorStop(1,shadeHex(L.road,-.25));
+  c.fillStyle=rg;c.fillRect(RL,0,RR-RL,H);
+  c.fillStyle='rgba(0,0,0,.12)';for(let i=0;i<LANES;i++){const cx=laneX(i);c.fillRect(cx-22,0,14,H);c.fillRect(cx+8,0,14,H)}
+  c.fillStyle='rgba(255,255,255,.08)';c.fillRect(RL,0,3,H);
+  for(const s of specksR){c.fillStyle='rgba(255,255,255,'+s.a+')';c.fillRect(s.x,(s.y+off)%H,s.r,s.r)}
+  const ro=off%56,cc=L.curb;for(let k=-2;k<H/28+2;k++){const y=k*28+ro;c.fillStyle=(k&1)?cc[1]:cc[0];c.fillRect(RL-9,y,8,28);c.fillRect(RR+1,y,8,28)}
+  c.fillStyle=L.line;c.fillRect(RL+3,0,4,H);c.fillRect(RR-7,0,4,H);
+  const lo=off%80;for(let i=1;i<LANES;i++){const x=RL+LW*i;for(let y=-80+lo;y<H;y+=80)c.fillRect(x-2,y,4,38)}
+  c.fillStyle='rgba(0,0,0,.35)';c.fillRect(RL-1,0,2,H);c.fillRect(RR-1,0,2,H);
+}
+function shadeHex(h,a){const n=parseInt(h.replace('#',''),16);let r=n>>16&255,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(a>=0?v+(255-v)*a:v*(1+a))));return'rgb('+f(r)+','+f(g)+','+f(b)+')'}
+function drawFinish(){
+  const fy=PY-(cfg.goal-dist)*PXM;if(fy<-60||fy>H+60)return;
+  const c=ctx,n=20,sz=(RR-RL)/n;
+  for(let r=0;r<2;r++)for(let i=0;i<n;i++){c.fillStyle=(i+r)%2?'#fff':'#111';c.fillRect(RL+i*sz,fy-sz+r*sz,sz,sz)}
+  c.fillStyle='rgba(0,0,0,.55)';rr(c,RL+60,fy-70,220,34,10);c.fill();
+  c.fillStyle='#fff';c.font='900 22px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('🏁 FINISH',RL+170,fy-52)
+}
+
+/* ================= zarra va popup ================= */
+function burst(x,y,n,kind,col){for(let i=0;i<n;i++)parts.push({x,y,vx:rnd(-180,180),vy:rnd(-220,120),life:rnd(.3,.8),max:.8,s:rnd(1.5,3.5),kind,col:col||'#ffd23f'})}
+function popup(t,x,y,col){pops.push({t,x,y,life:1.2,col:col||'#fff'})}
+
+/* ================= level boshlash ================= */
+function setTheme(){
+  D=[];for(let y=-80;y<H+80;y+=rnd(65,105))spawnDecor(y);
+  rain=[];
+}
+function startLevel(m,n){
+  if(MP.active)endMultiLocal();
+  $('pRestart').textContent='Qayta boshlash';$('pLevels').textContent='Level tanlash';
+  initAudio();
+  mapIdx=m;lvlIdx=n;L=MAPS[m];cfg=levelCfg(m,n);
+  setTheme();
+  if(cfg.rain)rain=Array.from({length:S.settings.quality==='low'?52:130},()=>({x:rnd(0,W),y:rnd(0,H),l:rnd(10,22),v:rnd(700,1000)}));
+  const car=tunedCar(CARS[S.car]);
+   P={x:laneX(1)+LW/2,vx:0,speed:0,nitro:60,lives:3,ammo:12,inv:0,slip:0,slipDir:0,boost:false,brake:false,angle:0,car,shield:0,magnet:0};
+  traffic=[];items=[];statics=[];parts=[];pops=[];bullets=[];dist=0;off=0;score=0;runCoins=0;shake=0;
+  G={shotT:0,ammoT:9,cd:3.4,spawnT:2.2,coinT:1.5,nitroT:8,heartT:28,shieldT:19,magnetT:26,oilT:7,coneT:5,fin:false,finT:0,dead:false,deadT:0,lastCd:4,bonus:0,decorAcc:0,clock:0,runShots:0,runKills:0,runNear:0,runCrashes:0,ended:false};
+  mode='play';hideAll();$('pauseBtn').classList.add('show');refreshTouchUI();
+  popup('XARITA '+(m+1)+': '+L.name,W/2,250,L.acc);
+  popup('LEVEL '+(n+1),W/2,290,'#ffffff');
+  if(isTouchDevice&&S.settings.controls==='swipe')popup('Ushlab tur = gaz · suring = burilish',W/2,190,'#7fe7ff');
+}
+function hideAll(){for(const id of['sTitle','sMaps','sLevels','sGarage','sPause','sEnd','sRecords','sSettings','sAccount','sLeaderboard','sDuel'])$(id).classList.remove('show')}
+function show(id){hideAll();$(id).classList.add('show');mode='ui';$('pauseBtn').classList.remove('show');$('touch').classList.remove('show');
+  if(id==='sMaps')renderMaps();if(id==='sLevels')renderLevels();if(id==='sGarage')renderGarage();if(id==='sTitle')renderTitle();if(id==='sRecords')renderRecords();if(id==='sSettings')renderSettings();window.dispatchEvent(new CustomEvent('turbo-screen',{detail:id}));
+  const section=$(id);if(section)section.scrollTop=0;}
+
+/* ================= DUO: deterministic 5000 m poyga ================= */
+function multiSeed(seed){let z=seed>>>0;return()=>{z=(z+0x6D2B79F5)>>>0;let t=z;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
+function makeMultiTrack(seed){const r=multiSeed(seed);const obs=[];
+  for(let at=95;at<4985;at+=75+Math.floor(r()*48)){
+    const safe=Math.floor(r()*LANES);const count=r()<.3?2:1;
+    for(let j=0;j<count;j++){
+      const free=Array.from({length:LANES},(_,i)=>i).filter(i=>i!==safe&&!obs.some(o=>Math.abs(o.at-at)<9&&o.lane===i));
+      if(!free.length)break;const lane=free[Math.floor(r()*free.length)];
+      const kind=['cone','oil','barrel','truck','cone','oil','nitro','shield','coin'][Math.floor(r()*9)];
+      obs.push({at,lane,x:laneX(lane),kind,id:obs.length,travel:kind==='truck'?65:0});
+    }
+    if(r()<.34){const kind=r()<.65?'nitro':'shield';obs.push({at:at+36,lane:safe,x:laneX(safe),kind,id:obs.length,travel:0})}
+  }
+  return obs;
+}
+function endMultiLocal(){MP.active=false;MP.room='';MP.peer=null;MP.obstacles=[];MP.hit.clear();MP.done=false;MP.started=false;MP.reporting=false;MP.ended=false;}
+function startMultiplayerRace(opt){
+  startLevel(clamp(opt.mapIdx|0,0,2),0);
+  MP.active=true;MP.room=opt.code;MP.startAt=opt.startAtMs;MP.seed=opt.seed>>>0;MP.role=opt.role;MP.hit.clear();MP.obstacles=makeMultiTrack(MP.seed);
+  MP.peer=null;MP.peerX=laneX(opt.role==='host'?2:1);MP.done=false;MP.started=false;MP.reporting=false;MP.ended=false;
+  cfg.goal=5000;cfg.rain=false;cfg.night=MAPS[mapIdx].night;rain=[];
+  P.x=laneX(opt.role==='host'?1:2);P.ammo=0;P.lives=3;P.nitro=80;
+  G.cd=Math.max(0,(MP.startAt-Date.now())/1000);G.clock=0;
+  $('pRestart').textContent='🚪 POYGADAN CHIQISH';$('pLevels').textContent='🏁 BOSH MENYU';
+  popup('👥 5000 M · DUO',W/2,250,'#7fe7ff');
+}
+function multiObsAt(o){return o.at+(o.travel?Math.max(0,(Date.now()-MP.startAt)/1000)*o.travel/3.6:0)}
+function drawMultiObjects(){if(!MP.active)return;const c=ctx;
+  for(const o of MP.obstacles){if(MP.hit.has(o.id))continue;
+    const y=PY+(dist-multiObsAt(o))*PXM;
+    if(y<-110||y>H+120)continue;
+    c.save();c.translate(o.x,y);
+    if(o.kind==='truck'){/* transport chizmasi quyida */}
+    else if(o.kind==='oil'){
+      c.fillStyle='rgba(1,4,12,.85)';c.beginPath();c.ellipse(0,0,29,23,.15,0,TAU);c.fill();c.strokeStyle='#625f8e';c.lineWidth=2;c.stroke();
+      c.fillStyle='rgba(145,105,240,.4)';c.beginPath();c.ellipse(-8,-8,14,4,-.25,0,TAU);c.fill();
+    }else if(o.kind==='cone'){
+      c.fillStyle='#ff9a17';c.beginPath();c.moveTo(0,-21);c.lineTo(15,17);c.lineTo(-15,17);c.closePath();c.fill();c.fillStyle='#fff';c.fillRect(-7,2,14,5);c.fillRect(-10,10,20,4);
+    }else if(o.kind==='barrel'){
+      c.fillStyle='#e64a26';rr(c,-18,-23,36,46,7);c.fill();c.fillStyle='#ffe5a0';c.fillRect(-18,-11,36,7);c.fillRect(-18,8,36,7);c.strokeStyle='#4f1e1e';c.lineWidth=2;c.strokeRect(-18,-23,36,46);
+    }else if(o.kind==='nitro'||o.kind==='shield'||o.kind==='coin'){
+      c.fillStyle=o.kind==='nitro'?'#237dff':o.kind==='shield'?'#67d7f8':'#ffc839';c.shadowBlur=13;c.shadowColor=c.fillStyle;
+      c.beginPath();c.arc(0,0,17,0,TAU);c.fill();c.shadowBlur=0;c.font='bold 19px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fff';c.fillText(o.kind==='nitro'?'⚡':o.kind==='shield'?'🛡':'★',0,1);
+    }
+    c.restore();
+    if(o.kind==='truck')drawCar(c,o.x,y,{shape:'truck',h:32},{angle:0});
+  }
+  if(MP.peer&&MP.peer.status!=='dnf'){
+    const p=MP.peer,oy=PY+(dist-p.dist)*PXM;
+    if(oy>-135&&oy<H+120){MP.peerX+=(p.x-MP.peerX)*.16;
+      const car=CARS[clamp(p.carId|0,0,49)];drawCar(c,MP.peerX,oy,car,{angle:0,alpha:.88,boost:p.speed>240});
+      c.save();c.textAlign='center';c.font='bold 12px system-ui';c.fillStyle='#fff';c.strokeStyle='#061729';c.lineWidth=4;c.strokeText('👥 '+String(p.nickname||'DO‘ST').slice(0,15),MP.peerX,oy-73);c.fillText('👥 '+String(p.nickname||'DO‘ST').slice(0,15),MP.peerX,oy-73);c.restore();
+    }
+  }
+}
+function multiCollide(o){if(MP.hit.has(o.id))return;
+  MP.hit.add(o.id);
+  if(o.kind==='coin'){P.nitro=Math.min(100,P.nitro+5);popup('⚡ +5',P.x,PY-80,'#ffd23f');return;}
+  if(o.kind==='nitro'){P.nitro=Math.min(100,P.nitro+40);popup('⚡ NITRO +40',P.x,PY-80,'#7fe7ff');beep(950,.2,'sine',.06);return;}
+  if(o.kind==='shield'){P.shield=1;popup('🛡 QALQON!',P.x,PY-80,'#7fe7ff');return;}
+  if(o.kind==='oil'){P.slip=1.25;P.slipDir=Math.random()<.5?-1:1;P.speed*=.75;popup('NEFT! SIRPANISH',P.x,PY-70,'#ffd23f');return;}
+  P.speed*=o.kind==='cone'?.63:.35;shake=.6;G.runCrashes++;
+  if(P.shield){P.shield=0;popup('🛡 HIMOYA!',P.x,PY-75,'#7fe7ff')}
+  else if(P.inv<=0&&o.kind!=='cone'){P.lives--;P.inv=1.8;popup('💥 '+(P.lives||'OXIRGI')+' HAYOT',P.x,PY-75,'#ff5b6d')}
+  else popup('TO‘SIQ!',P.x,PY-75,'#ff9a42');
+  burst(P.x,PY,18,'spark','#ffae33');boom();vibe([65,50,80]);
+  if(P.lives<=0){endMultiplayerRun('dnf')}
+}
+function endMultiplayerRun(status){if(!MP.active||MP.done)return;
+  MP.done=true;G.fin=status==='finished';G.dead=status!=='finished';
+  window.TurboMultiplayer?.finish(status,{dist:Math.min(5000,Math.floor(dist)),x:Math.round(P.x),speed:Math.round(P.speed),lives:P.lives,elapsedMs:Math.max(0,Math.round(Date.now()-MP.startAt))});
+  showEnd('<h2>'+(status==='finished'?'🏁 FINISH!':'💥 POYGA TUGADI')+'</h2><p class="sub">Raqibning yakuniy natijasi kutilmoqda…</p><div class="section-card" id="duelEndState">Firebase bilan tekshirilmoqda…</div><button class="btn main big" id="duelExitEnd">BOSH MENYU</button>');
+  $('duelExitEnd').onclick=()=>{window.TurboMultiplayer?.leave(false);endMultiLocal();show('sTitle')};
+  window.TurboMultiplayer?.reconcile();
+}
+function updateMulti(dt){
+  time+=dt;const left=(MP.startAt-Date.now())/1000;
+  if(left>0){G.cd=left;updateDecor(dt,0);updateFx(dt);return}
+  if(!MP.started){MP.started=true;G.cd=0;popup('BOSHLANDI!',W/2,290,'#27f3a0');beep(1000,.24,'triangle',.07)}
+  G.cd=0;G.clock=Math.max(0,(Date.now()-MP.startAt)/1000);
+  const car=P.car;
+  let dir=(keys.r?1:0)-(keys.l?1:0),brake=!!keys.b,boost=!!keys.n,gas=true;
+  if(isTouchDevice&&S.settings.controls==='swipe'){
+    if(touch.down){const dx=touch.x-touch.x0,dy=touch.y-touch.y0;dir=Math.abs(dx)>5?clamp(dx/70,-1,1):0;brake=dy>55;boost=dy< -55;gas=!brake}
+    else{brake=true;gas=false}
+  }
+  P.brake=brake;P.boost=boost&&P.nitro>0&&P.speed>40;
+  if(P.slip>0){P.slip=Math.max(0,P.slip-dt);dir=P.slipDir*(.5+.4*Math.sin(time*17))}
+  P.nitro=clamp(P.nitro+(P.boost?-30:2.5)*dt,0,100);
+  const target=car.max+(P.boost?car.nit:0);
+  if(brake)P.speed-=170*dt;
+  else if(gas)P.speed+=car.acc*(P.boost?2:1)*dt;
+  else P.speed-=25*dt;
+  P.speed=clamp(P.speed,0,target);
+  P.vx+=(dir*car.hand*290-P.vx)*(1-Math.exp(-L.grip*dt));
+  P.x=clamp(P.x+P.vx*dt,RL+26,RR-26);
+  P.angle=clamp(P.vx/310*.2,-.3,.3);P.inv=Math.max(0,P.inv-dt);
+  const prev=dist;
+  dist=clamp(dist+P.speed/3.6*dt,0,5000);off+=P.speed*K*dt;score=Math.round(dist);updateDecor(dt,P.speed*K);
+  for(const o of MP.obstacles){if(MP.hit.has(o.id))continue;
+    const at=multiObsAt(o);
+    if(at<dist-11&&prev<at+11){MP.hit.add(o.id);continue}
+    const ydiff=at-dist;
+    if(Math.abs(ydiff)<4.9&&Math.abs(P.x-o.x)<(o.kind==='truck'?35:25))multiCollide(o);
+  }
+  if(dist>=5000){endMultiplayerRun('finished');return}
+  if(!MP.done)window.TurboMultiplayer?.publish({dist:Math.round(dist),x:Math.round(P.x),speed:Math.round(P.speed),lives:P.lives});
+  updateFx(dt);
+}
+function duelHud(){if(!MP.active)return;const c=ctx,p=MP.peer;
+  c.save();c.fillStyle='rgba(6,18,38,.81)';rr(c,62,162,355,76,11);c.fill();
+  c.fillStyle='#b7eaff';c.font='900 12px system-ui';c.textAlign='left';c.fillText('👥 SEN · '+Math.floor(dist)+' m',75,184);
+  c.fillStyle='#fff';c.textAlign='right';c.fillText('DO‘ST · '+Math.floor(p?.dist||0)+' m',401,184);
+  c.fillStyle='#263c57';rr(c,76,198,326,10,5);c.fill();
+  c.fillStyle='#45d8ff';rr(c,76,198,Math.max(4,326*dist/5000),10,5);c.fill();
+  c.fillStyle='#fbc444';rr(c,76,215,Math.max(4,326*(p?.dist||0)/5000),8,4);c.fill();
+  c.fillStyle='#a9bcd4';c.font='700 10px system-ui';c.textAlign='right';c.fillText('KO‘K: SEN   SARIQ: DO‘ST',401,233);
+  c.restore();
+}
+window.TurboMPGame={launch:startMultiplayerRace,peer:data=>{if(MP.active)MP.peer=data},isActive:()=>MP.active,
+  exit:()=>{endMultiLocal();if(mode==='play'||mode==='pause')show('sTitle')},
+  stop:()=>endMultiLocal()};
+
+/* ================= trafik ================= */
+function spawnTraffic(){
+  const lane=Math.random()*LANES|0,lv=lvlIdx;
+  for(const t of traffic){if(!t.hit&&t.y<300&&t.lane===lane&&t.y<280)return}
+  const r=Math.random();let shape,kind='car',h,hue,kmh,enemy=false;
+  if(r<.07+lv*.002){shape='truck';kind='truck';kmh=rnd(50,68);hue=rnd(0,360)}
+  else if(r<.17+lv*.002){shape='van';kind='van';kmh=rnd(66,92);hue=rnd(0,360)}
+  else{shape=pick(['sedan','hatch','sedan','taxi','muscle','hatch','super']);kmh=Math.min(130,rnd(58,104)+lvlIdx*.6);
+    if(shape==='taxi'){kind='taxi';hue=50}else hue=rnd(0,360);
+    enemy=Math.random()<cfg.enemy}
+  h=SH[shape==='taxi'?'taxi':shape].h*CAR_LENGTH;
+  traffic.push({x:laneX(lane),y:-h/2-20,lane,shape,kind,h:h,hue,stripe:null,spoiler:false,kmh,enemy,hp:enemy?cfg.hp:1,
+    hit:false,vx:0,spin:0,ang:0,ph:0,bt:0,dir:0,nl:lane,tx:0,willChange:!enemy&&lv>=2&&shape!=='truck'&&Math.random()<.1+lv*.008,nm:false,prevY:-100});
+}
+function destroyCar(t){
+  t.hit=true;t.vx=(Math.random()<.5?-1:1)*rnd(90,200);t.spin=rnd(-8,8);
+  burst(t.x,t.y,26,'spark','#ffb020');burst(t.x,t.y,10,'smoke','#555');boom();
+  G.runKills++;if(t.enemy){runCoins+=6;popup('+30 🪙',t.x,t.y-30,'#ffd23f')}
+  else{G.bonus+=10;popup('BOOM! +10',t.x,t.y-30,'#ff9a3c')}
+}
+function crash(t){
+   if(P.shield>0){P.shield--;P.inv=1.6;P.speed*=.78;shake=.18;vibe(45);beep(950,.22,'triangle',.06,400);burst(P.x,PY,22,'spark','#72e7ff');popup('🛡 QALQON ASRADI!',P.x,PY-75,'#80eaff');t.hit=true;t.vx=(t.x>=P.x?1:-1)*rnd(170,260);t.spin=rnd(-6,6);return}
+   G.runCrashes++;P.lives--;P.inv=2.2;P.speed*=.4;shake=.6;vibe([75,35,110]);boom();
+  burst((P.x+t.x)/2,(PY+t.y)/2,22,'spark','#ffd23f');burst(P.x,PY-20,10,'smoke','#888');
+  t.hit=true;t.vx=(t.x>=P.x?1:-1)*rnd(160,260);t.spin=(Math.random()-.5)*8;
+  popup('TO‘QNASHUV!',P.x,PY-70,'#ff6b6b');
+  if(P.lives<=0){G.dead=true;G.deadT=0}
+}
+
+/* ================= yangilash ================= */
+function update(dt){
+  if(MP.active){updateMulti(dt);return}
+  time+=dt;
+  if(G.cd>0){
+    G.cd-=dt;const n=Math.ceil(G.cd);if(n!==G.lastCd&&G.cd>0){G.lastCd=n;beep(520,.12,'square',.05)}
+    if(G.cd<=0){beep(1040,.35,'square',.06);popup('BOSHLADIK!',W/2,330,'#27f3a0')}
+    updateDecor(dt,0);updateFx(dt);return;
+  }
+     G.clock+=dt;P.magnet=Math.max(0,P.magnet-dt);
+   const car=P.car;
+   let dir=0,brakeOn=false,boostOn=false,gasOn=true;
+  if(isTouchDevice&&S.settings.controls==='swipe'){
+     const dx=touch.x-touch.x0,dy=touch.y-touch.y0;
+    if(touch.down){dir=Math.abs(dx)>5?clamp(dx/70,-1,1):0;brakeOn=dy>55;boostOn=dy<-55;gasOn=!brakeOn}
+    else{brakeOn=true;gasOn=false}
+  }else{dir=(keys.r?1:0)-(keys.l?1:0);brakeOn=!!keys.b;boostOn=!!keys.n;gasOn=!brakeOn}
+  P.brake=brakeOn&&!G.fin&&!G.dead;
+  P.boost=!!(boostOn&&P.nitro>0&&P.speed>50&&!G.fin&&!G.dead);
+  if(P.slip>0){P.slip-=dt;dir=P.slipDir*(.6+.4*Math.sin(time*18))}
+  if(P.boost)P.nitro=Math.max(0,P.nitro-32*dt);else P.nitro=Math.min(100,P.nitro+3*dt);
+  let target=car.max+(P.boost?car.nit:0);
+  if(G.dead||G.fin)target=0;
+  if(P.brake)P.speed-=170*dt;
+  else if(gasOn&&P.speed<target)P.speed+=car.acc*(P.boost?2:1)*dt;
+  else P.speed-=(G.fin||G.dead?70:25)*dt;
+  P.speed=Math.max(G.fin||G.dead?0:40,P.speed);
+  if(P.slip>0&&P.speed>0)P.speed-=10*dt;
+  const grip=L.grip*(cfg.rain?.6:1);
+  const lat=dir*car.hand*300*(P.speed>0?1:0);
+  P.vx+=(lat-P.vx)*(1-Math.exp(-grip*dt));
+  P.x+=P.vx*dt;
+  const mn=RL+24,mx=RR-24;
+  if(P.x<mn){P.x=mn;P.vx=0;P.speed=Math.max(40,P.speed-30*dt)}
+  if(P.x>mx){P.x=mx;P.vx=0;P.speed=Math.max(40,P.speed-30*dt)}
+  P.angle=clamp(P.vx/300*.2,-.3,.3);
+  if(P.inv>0&&!G.fin)P.inv-=dt;
+
+  const spd=P.speed*K;
+  off+=spd*dt;dist+=P.speed/3.6*dt;score=Math.floor(dist)+G.bonus;
+  updateDecor(dt,spd);
+
+  if(!G.fin&&!G.dead&&dist>=cfg.goal){G.fin=true;G.finT=0;P.inv=99;beep(880,.2,'triangle',.07);beep(1320,.4,'triangle',.07);popup('FINISH!',W/2,320,'#ffd23f')}
+  if(G.fin){G.finT+=dt;if(G.finT>2.3){levelComplete();return}}
+  if(G.dead){G.deadT+=dt;if(G.deadT>1.3){gameOver();return}}
+
+  if(!G.fin&&!G.dead){
+    G.shotT=Math.max(0,G.shotT-dt);
+    if((keys.f||fireReq)&&P.ammo>0&&G.shotT<=0){bullets.push({x:P.x,y:PY-52,dead:false});P.ammo--;G.runShots++;G.shotT=.2;beep(1500,.05,'square',.03,600)}
+    fireReq=false;
+    G.spawnT-=dt*(P.speed/150);
+    if(G.spawnT<=0){spawnTraffic();G.spawnT=rnd(.55,1.1)*(1.35/cfg.dens)*rnd(.8,1.2)}
+    G.coinT-=dt;if(G.coinT<=0){G.coinT=rnd(3,5);const ln=Math.random()*LANES|0,n=rnd(4,7)|0;for(let i=0;i<n;i++)items.push({t:'coin',x:laneX(ln),y:-30-i*58,ph:i*.5})}
+    G.nitroT-=dt;if(G.nitroT<=0){G.nitroT=rnd(10,15);items.push({t:'nitro',x:laneX(Math.random()*LANES|0),y:-40,ph:0})}
+    G.ammoT-=dt;if(G.ammoT<=0){G.ammoT=rnd(12,18);items.push({t:'ammo',x:laneX(Math.random()*LANES|0),y:-40,ph:0})}
+    G.heartT-=dt;if(G.heartT<=0){G.heartT=rnd(28,40);if(P.lives<3)items.push({t:'heart',x:laneX(Math.random()*LANES|0),y:-40,ph:0})}
+     G.shieldT-=dt;if(G.shieldT<=0){G.shieldT=rnd(22,34);if(!P.shield)items.push({t:'shield',x:laneX(Math.random()*LANES|0),y:-40,ph:0})}
+     G.magnetT-=dt;if(G.magnetT<=0){G.magnetT=rnd(29,39);items.push({t:'magnet',x:laneX(Math.random()*LANES|0),y:-40,ph:0})}
+    if(cfg.oil){G.oilT-=dt;if(G.oilT<=0){G.oilT=rnd(5,9);statics.push({t:'oil',x:laneX(Math.random()*LANES|0)+rnd(-16,16),y:-40,r:rnd(22,30)})}}
+    if(cfg.cones){G.coneT-=dt;if(G.coneT<=0){G.coneT=rnd(5,9);const ln=Math.random()*LANES|0,n=rnd(2,4)|0;for(let i=0;i<n;i++)statics.push({t:'cone',x:laneX(ln)+(i-1)*20,y:-30-i*10,hit:false,vx:0,spin:0,ang:0})}}
+  }
+
+  for(const t of traffic){
+    t.prevY=t.y;
+    if(!t.hit){
+      if(t.willChange&&t.ph===0&&t.y>80&&t.y<420){
+        const d=t.lane===0?1:t.lane===LANES-1?-1:(Math.random()<.5?-1:1),nl=t.lane+d;let free=true;
+        for(const u of traffic)if(u!==t&&!u.hit&&u.lane===nl&&Math.abs(u.y-t.y)<190)free=false;
+        if(free){t.ph=1;t.bt=.9;t.dir=d;t.nl=nl}else t.willChange=false}
+      if(t.ph===1){t.bt-=dt;if(t.bt<=0){t.ph=2;t.lane=t.nl;t.tx=laneX(t.nl)}}
+      if(t.ph===2){const dx=t.tx-t.x,stp=Math.sign(dx)*Math.min(Math.abs(dx),75*dt);t.x+=stp;t.ang=clamp(dx/60,-.25,.25);if(Math.abs(dx)<.5){t.ph=3;t.ang=0;t.willChange=false}}
+    }else{t.x+=t.vx*dt;t.vx*=.985;t.ang+=t.spin*dt}
+    t.y+=(P.speed-t.kmh)*K*dt;
+  }
+  for(const a of traffic){if(a.hit)continue;for(const b of traffic){if(b===a||b.hit||b.lane!==a.lane)continue;
+    const gap=a.y-b.y;if(gap>0&&gap<(SH[a.shape==='taxi'?'taxi':a.shape].h*CAR_LENGTH+b.h)/2+34&&a.kmh>b.kmh)a.kmh=b.kmh}}
+  if(!G.fin&&!G.dead){
+    for(const t of traffic){
+      if(t.hit)continue;const Sx=SH[t.shape==='taxi'?'taxi':t.shape];
+      const hx=17+Sx.w*.4,hy=(40+Sx.h*.43)*CAR_LENGTH;
+      if(P.inv<=0&&Math.abs(t.x-P.x)<hx&&Math.abs(t.y-PY)<hy){crash(t);continue}
+      if(!t.nm&&t.prevY<PY-30&&t.y>=PY-30&&P.speed>100){const dx=Math.abs(t.x-P.x);t.nm=true;
+         if(dx>hx&&dx<hx+38){G.runNear++;G.bonus+=25;P.nitro=Math.min(100,P.nitro+6);popup('YAQIN! +25',P.x,PY-80,'#7fe7ff');beep(900,.08,'triangle',.04,1300)}}
+    }
+  }
+  for(const b of bullets)b.y-=1100*dt;
+  for(const b of bullets){
+    if(b.dead)continue;
+    for(const t of traffic){
+      if(t.hit)continue;const Sx=SH[t.shape==='taxi'?'taxi':t.shape];
+      if(Math.abs(t.x-b.x)<Sx.w/2+2&&Math.abs(t.y-b.y)<Sx.h*CAR_LENGTH/2+8){
+        b.dead=true;t.hp--;
+        if(t.hp>0){burst(b.x,b.y,5,'spark','#ff8a00');beep(700,.05,'square',.04)}else destroyCar(t);
+        break}
+    }
+  }
+  bullets=bullets.filter(b=>!b.dead&&b.y>-40);
+  traffic=traffic.filter(t=>t.y<H+200&&t.y>-420&&t.x>-120&&t.x<W+120);
+
+  for(const it of items){it.y+=spd*dt;if(P.magnet>0&&it.t==='coin'&&Math.abs(it.y-PY)<175&&Math.abs(it.x-P.x)<190)it.x+=(P.x-it.x)*Math.min(1,dt*5);
+    if(!G.fin&&!G.dead&&Math.abs(it.x-P.x)<30&&Math.abs(it.y-PY)<46&&!it.got){it.got=true;
+      if(it.t==='coin'){runCoins++;G.bonus+=5;beep(1100,.07,'square',.04,1650);burst(it.x,it.y,4,'spark','#ffd23f')}
+      else if(it.t==='nitro'){P.nitro=Math.min(100,P.nitro+40);popup('NITRO +40',P.x,PY-70,'#7fe7ff');beep(500,.25,'sawtooth',.05,1200)}
+      else if(it.t==='ammo'){P.ammo+=6;popup('+6 o‘q',P.x,PY-70,'#ffd23f');beep(800,.1,'triangle',.05,1200)}
+       else if(it.t==='shield'){P.shield=1;popup('🛡 QALQON!',P.x,PY-70,'#80eaff');beep(1200,.15,'triangle',.06)}
+       else if(it.t==='magnet'){P.magnet=10;popup('🧲 MAGNIT 10s!',P.x,PY-70,'#f4aaff');beep(760,.2,'sine',.07,1450)}
+       else{P.lives=Math.min(3,P.lives+1);popup('+1 ❤',P.x,PY-70,'#ff6b8a');beep(660,.12,'triangle',.06);beep(990,.2,'triangle',.06)}
+    }}
+  items=items.filter(i=>!i.got&&i.y<H+40);
+
+  for(const s of statics){
+    if(s.t==='cone'&&s.hit){s.x+=s.vx*dt;s.ang+=s.spin*dt;s.y+=spd*dt*.7}else s.y+=spd*dt;
+    if(!G.fin&&!G.dead){
+      if(s.t==='oil'&&P.slip<=0&&Math.abs(s.x-P.x)<s.r+10&&Math.abs(s.y-PY)<s.r+24){P.slip=1.0;P.slipDir=Math.random()<.5?-1:1;popup('SUYRILDI!',P.x,PY-70,'#ffd23f')}
+      if(s.t==='cone'&&!s.hit&&Math.abs(s.x-P.x)<22&&Math.abs(s.y-PY)<44){s.hit=true;s.vx=(s.x>=P.x?1:-1)*rnd(120,220);s.spin=rnd(-10,10);P.speed*=.82;shake=Math.max(shake,.25);burst(s.x,s.y,6,'spark','#ff8a00');beep(200,.1,'square',.06,90)}
+    }
+  }
+  statics=statics.filter(s=>s.y<H+60&&s.x>-60&&s.x<W+60);
+  if(S.settings.quality==='high'&&Math.random()<dt*(P.speed/60))parts.push({x:P.x+rnd(-8,8),y:PY+44,vx:rnd(-10,10),vy:rnd(40,90)+spd*.2,life:.5,max:.5,s:rnd(3,6),kind:'smoke',col:'#aaa'});
+  if(P.boost&&S.settings.quality==='high')for(let i=0;i<2;i++)parts.push({x:P.x+rnd(-10,10),y:PY+48,vx:rnd(-20,20),vy:rnd(120,260),life:.35,max:.35,s:rnd(3,6),kind:'flame',col:'#6cc8ff'});
+  updateFx(dt);
+}
+function updateDecor(dt,spd){
+  for(const d of D)d.y+=spd*dt;
+  D=D.filter(d=>d.y<H+70);
+  G.decorAcc=(G.decorAcc||0)+spd*dt;
+  while(G.decorAcc>rnd(70,110)){G.decorAcc=0;spawnDecor(-60)}
+}
+function updateFx(dt){
+  if(shake>0)shake=Math.max(0,shake-dt*1.6);
+  for(const p of parts){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.kind==='spark')p.vy+=500*dt}
+  parts=parts.filter(p=>p.life>0);
+  for(const p of pops){p.life-=dt;p.y-=30*dt}
+  pops=pops.filter(p=>p.life>0);
+  for(const r of rain){r.y+=r.v*dt;r.x-=r.v*.12*dt;if(r.y>H){r.y=-20;r.x=rnd(0,W+60)}if(r.x<-10)r.x=W}
+}
+
+/* ================= chizish ================= */
+function render(){
+  const c=ctx;
+  c.save();
+  if(shake>0)c.translate(rnd(-1,1)*shake*12,rnd(-1,1)*shake*12);
+  LG=[];
+  drawRoad();drawFinish();
+  for(const d of D)drawDecor(d);
+  if(MP.active)drawMultiObjects();
+  for(const s of statics){
+    if(s.t==='oil'){c.save();c.translate(s.x,s.y);const g=c.createRadialGradient(0,0,2,0,0,s.r);g.addColorStop(0,'rgba(10,10,20,.95)');g.addColorStop(.8,'rgba(15,15,30,.85)');g.addColorStop(1,'rgba(15,15,30,0)');
+      c.fillStyle=g;c.scale(1.1,.8);c.beginPath();c.arc(0,0,s.r,0,TAU);c.fill();c.fillStyle='rgba(140,100,255,.28)';c.beginPath();c.ellipse(-s.r*.25,-s.r*.2,s.r*.4,s.r*.2,.5,0,TAU);c.fill();c.restore()}
+    else{c.save();c.translate(s.x,s.y);c.rotate(s.ang);c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(3,4,10,10,0,0,TAU);c.fill();
+      c.fillStyle='#ff7a1a';c.beginPath();c.arc(0,0,9,0,TAU);c.fill();c.fillStyle='#fff';c.beginPath();c.arc(0,0,6,0,TAU);c.fill();c.fillStyle='#ff7a1a';c.beginPath();c.arc(0,0,3.2,0,TAU);c.fill();c.restore()}
+  }
+  for(const it of items)drawItem(it);
+  for(const t of traffic){
+    if(t.kind==='truck')drawCar(c,t.x,t.y,{shape:'truck',h:t.hue},{angle:t.ang});
+    else drawCar(c,t.x,t.y,{shape:t.shape==='taxi'?'sedan':t.shape,kind:t.kind,h:t.hue,stripe:t.stripe,spoiler:t.spoiler},{angle:t.ang,blink:t.ph===1?t.dir:0});
+    if(cfg.night||MAPS[mapIdx].night)LG.push({x:t.x,y:t.y-50,r:60,c:'255,244,200',a:.35,car:1});
+    if(t.enemy&&!t.hit){c.save();c.translate(t.x,t.y-t.h/2-12);c.fillStyle='#ff2e4d';c.font='900 12px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('☠ '+t.hp,0,0);c.restore()}
+  }
+    if(P){
+     if(P.shield){c.save();c.strokeStyle='rgba(116,227,255,.8)';c.lineWidth=3;c.shadowColor='#4fc7ff';c.shadowBlur=18;c.beginPath();c.ellipse(P.x,PY,39+Math.sin(time*6)*2,64,0,0,TAU);c.stroke();c.restore()}
+     if(P.magnet>0){c.save();c.strokeStyle='rgba(230,120,255,.3)';c.lineWidth=2;c.beginPath();c.arc(P.x,PY,65+Math.sin(time*4)*5,0,TAU);c.stroke();c.restore()}
+     const blinkOff=P.inv>0&&!G.fin&&Math.floor(P.inv*14)%2===0;
+    drawCar(c,P.x,PY,P.car,{angle:P.angle+(P.slip>0?Math.sin(time*20)*.18:0),brake:P.brake,boost:P.boost,alpha:blinkOff?.35:1});
+  }
+  for(const b of bullets){c.save();c.globalCompositeOperation='lighter';c.lineCap='round';c.strokeStyle='rgba(255,160,0,.5)';c.lineWidth=7;c.beginPath();c.moveTo(b.x,b.y);c.lineTo(b.x,b.y+18);c.stroke();c.strokeStyle='#ffe066';c.lineWidth=3;c.stroke();c.restore()}
+  for(const p of parts){const a=clamp(p.life/p.max,0,1);
+    if(p.kind==='flame'){c.globalCompositeOperation='lighter';c.fillStyle='rgba(110,200,255,'+a*.8+')';c.beginPath();c.arc(p.x,p.y,p.s*a+1,0,TAU);c.fill();c.globalCompositeOperation='source-over'}
+    else if(p.kind==='smoke'){c.fillStyle='rgba(180,180,185,'+a*.28+')';c.beginPath();c.arc(p.x,p.y,p.s*(2-a),0,TAU);c.fill()}
+    else{c.fillStyle=p.col;c.globalAlpha=a;c.fillRect(p.x,p.y,p.s,p.s);c.globalAlpha=1}}
+  if(S.settings.quality==='high'&&P&&P.speed>150){const a=clamp((P.speed-150)/150,0,.5)*(P.boost?1.4:1);c.strokeStyle='rgba(255,255,255,'+a*.35+')';c.lineWidth=1.5;
+    for(let i=0;i<9;i++){const x=(i%2?rnd(4,RL-6):rnd(RR+6,W-4)),y=rnd(0,H),l=rnd(40,110);c.beginPath();c.moveTo(x,y);c.lineTo(x,y+l);c.stroke()}}
+  c.restore();
+  night();weather();hud();if(MP.active)duelHud();
+}
+function drawItem(it){
+  const c=ctx;c.save();c.translate(it.x,it.y);
+  if(it.t==='coin'){const sc=Math.max(.18,Math.abs(Math.cos(time*4+it.ph)));c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(4,5,9*sc,10,0,0,TAU);c.fill();
+    c.scale(sc,1);const g=c.createRadialGradient(-3,-3,1,0,0,11);g.addColorStop(0,'#fff4b0');g.addColorStop(.6,'#ffc83d');g.addColorStop(1,'#c88a00');
+    c.fillStyle=g;c.beginPath();c.arc(0,0,10,0,TAU);c.fill();c.strokeStyle='#a87000';c.lineWidth=1.5;c.stroke()}
+  else if(it.t==='nitro'){c.fillStyle='rgba(0,0,0,.25)';rr(c,-12,-10,26,30,6);c.fill();const g=c.createLinearGradient(0,-16,0,16);g.addColorStop(0,'#7fe7ff');g.addColorStop(1,'#1a6bff');
+    c.fillStyle=g;rr(c,-14,-16,28,32,7);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.stroke();
+    c.fillStyle='#fff';c.beginPath();c.moveTo(3,-11);c.lineTo(-7,2);c.lineTo(-1,2);c.lineTo(-4,12);c.lineTo(7,-3);c.lineTo(1,-3);c.closePath();c.fill()}
+  else if(it.t==='ammo'){c.fillStyle='rgba(0,0,0,.3)';rr(c,-13,-11,26,26,4);c.fill();c.fillStyle='#ffc83d';rr(c,-14,-14,28,28,4);c.fill();c.strokeStyle='#8a6200';c.lineWidth=2;c.stroke();c.fillStyle='#3b2a00';c.font='900 13px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('+6',0,1)}
+     else if(it.t==='shield'||it.t==='magnet'){
+     c.save();c.rotate(Math.sin(time*3)*.08);c.fillStyle=it.t==='shield'?'#35b8fa':'#ac59dd';c.strokeStyle='#fff';c.lineWidth=2;
+     rr(c,-16,-16,32,32,10);c.fill();c.stroke();c.font='22px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fff';c.fillText(it.t==='shield'?'🛡':'🧲',0,1);c.restore()}
+   else{const pu=1+Math.sin(time*6)*.1;c.save();c.translate(0,0);c.scale(pu*18/18,pu);c.fillStyle='#ff3b6b';c.beginPath();c.moveTo(0,.45*18);c.bezierCurveTo(-1.2*18,-.3*18,-.65*18,-1*18,0,-.4*18);c.bezierCurveTo(.65*18,-1*18,1.2*18,-.3*18,0,.45*18);c.fill();c.restore()}
+  c.restore();
+}
+function night(){
+  const amt=Math.max(cfg.night||0,MAPS[mapIdx].night);if(!amt)return;
+  const d=dctx;d.globalCompositeOperation='source-over';d.clearRect(0,0,W,H);
+  d.fillStyle='rgba(3,5,18,'+amt+')';d.fillRect(0,0,W,H);
+  d.globalCompositeOperation='destination-out';
+  if(P){const g=d.createLinearGradient(0,PY-40,0,PY-380);g.addColorStop(0,'rgba(0,0,0,.95)');g.addColorStop(1,'rgba(0,0,0,0)');
+    d.fillStyle=g;d.beginPath();d.moveTo(P.x-16,PY-42);d.lineTo(P.x+16,PY-42);d.lineTo(P.x+105,PY-380);d.lineTo(P.x-105,PY-380);d.closePath();d.fill();
+    const r=d.createRadialGradient(P.x,PY,10,P.x,PY,95);r.addColorStop(0,'rgba(0,0,0,.9)');r.addColorStop(1,'rgba(0,0,0,0)');d.fillStyle=r;d.fillRect(P.x-100,PY-100,200,200)}
+  for(const l of LG){const r=d.createRadialGradient(l.x,l.y,2,l.x,l.y,l.r);r.addColorStop(0,'rgba(0,0,0,'+Math.min(.95,(l.a||.4)+.4)+')');r.addColorStop(1,'rgba(0,0,0,0)');d.fillStyle=r;d.fillRect(l.x-l.r,l.y-l.r,l.r*2,l.r*2)}
+  ctx.drawImage(dark,0,0,W,H);
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  for(const l of (S.settings.quality==='high'?LG:[])){if(l.car)continue;const r=ctx.createRadialGradient(l.x,l.y,1,l.x,l.y,l.r);r.addColorStop(0,'rgba('+l.c+','+(l.a||.4)+')');r.addColorStop(1,'rgba('+l.c+',0)');ctx.fillStyle=r;ctx.fillRect(l.x-l.r,l.y-l.r,l.r*2,l.r*2)}
+  if(P){const g=ctx.createLinearGradient(0,PY-40,0,PY-330);g.addColorStop(0,'rgba(255,240,190,.2)');g.addColorStop(1,'rgba(255,240,190,0)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(P.x-16,PY-42);ctx.lineTo(P.x+16,PY-42);ctx.lineTo(P.x+90,PY-330);ctx.lineTo(P.x-90,PY-330);ctx.closePath();ctx.fill()}
+  ctx.restore();
+}
+function weather(){
+  if(!rain.length)return;const c=ctx;
+  c.strokeStyle='rgba(190,215,255,.4)';c.lineWidth=1.2;c.beginPath();for(const r of rain){c.moveTo(r.x,r.y);c.lineTo(r.x+r.l*.12,r.y+r.l)}c.stroke();
+  c.fillStyle='rgba(30,50,90,.12)';c.fillRect(0,0,W,H);
+}
+function hud(){
+  if(!P)return;const c=ctx;
+  const g=c.createLinearGradient(0,0,0,115);g.addColorStop(0,'rgba(0,0,0,.7)');g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(0,0,W,115);
+  c.textBaseline='middle';c.textAlign='left';c.fillStyle='#fff';c.font='800 14px system-ui,sans-serif';
+  c.fillText(MP.active?'👥 DUO · 5000 M':MAPS[mapIdx].name+'  ·  LEVEL '+(lvlIdx+1)+'/50',60,24);
+  for(let i=0;i<3;i++){c.fillStyle=i<P.lives?'#ff3b4e':'rgba(255,255,255,.22)';c.beginPath();c.arc(W-24-i*27,24,8,0,TAU);c.fill()}
+  const pr=clamp(dist/cfg.goal,0,1);
+  c.fillStyle='rgba(255,255,255,.2)';rr(c,14,52,W-28,9,4.5);c.fill();
+  const pg=c.createLinearGradient(14,0,W-14,0);pg.addColorStop(0,'#27f3a0');pg.addColorStop(1,'#ffd23f');c.fillStyle=pg;rr(c,14,52,Math.max(9,(W-28)*pr),9,4.5);c.fill();
+  c.fillStyle='#fff';c.beginPath();c.arc(14+(W-28)*pr,56.5,7,0,TAU);c.fill();
+  c.font='700 11px system-ui,sans-serif';c.fillStyle='rgba(255,255,255,.8)';c.textAlign='right';c.fillText('🏁 '+Math.max(0,Math.ceil(cfg.goal-dist))+' m',W-14,74);
+  c.textAlign='left';c.fillStyle='#ffc83d';c.beginPath();c.arc(24,98,9,0,TAU);c.fill();
+  c.fillStyle='#fff';c.font='800 18px system-ui,sans-serif';c.fillText(String(runCoins*5),40,98);
+  c.textAlign='right';c.fillText(String(score),W-14,98);
+  c.textAlign='center';c.font='900 32px system-ui,sans-serif';c.fillStyle=P.boost?'#7fe7ff':'#fff';c.fillText(String(Math.round(P.speed)),W/2,94);
+  c.font='700 11px system-ui,sans-serif';c.fillStyle='rgba(255,255,255,.7)';c.fillText('km/h',W/2,112);
+  c.textAlign='right';c.fillStyle='#ffd23f';c.font='900 16px system-ui,sans-serif';c.fillText(MP.active?'🏁 5000 m':'🔫 '+P.ammo,W-14,130);
+   c.fillStyle='#fff';c.textAlign='center';c.font='800 12px system-ui,sans-serif';c.fillText(prettyTime(G.clock),W/2,137);
+   c.font='900 15px system-ui,sans-serif';if(P.shield)c.fillText('🛡 '+P.shield,W-35,155);if(P.magnet>0){c.fillStyle='#f4b4ff';c.fillText('🧲 '+Math.ceil(P.magnet)+'s',W-37,176)}
+  const bx=20,by=150,bh=210;c.fillStyle='rgba(0,0,0,.45)';rr(c,bx-3,by-3,22,bh+6,8);c.fill();
+  c.fillStyle='rgba(255,255,255,.14)';rr(c,bx,by,16,bh,6);c.fill();
+  const nh=bh*P.nitro/100;const ng=c.createLinearGradient(0,by+bh,0,by);ng.addColorStop(0,'#1a6bff');ng.addColorStop(1,'#7fe7ff');c.fillStyle=ng;if(nh>1){rr(c,bx,by+bh-nh,16,nh,6);c.fill()}
+  c.fillStyle='#7fe7ff';c.font='900 10px system-ui,sans-serif';c.textAlign='center';c.fillText('⚡',bx+8,by-14);
+  c.font='900 20px system-ui,sans-serif';c.textAlign='center';
+  for(const p of pops){c.globalAlpha=clamp(p.life,0,1);c.lineWidth=4;c.strokeStyle='rgba(0,0,0,.6)';c.strokeText(p.t,p.x,p.y);c.fillStyle=p.col;c.fillText(p.t,p.x,p.y)}
+  c.globalAlpha=1;
+  if(G.cd>0){const n=Math.ceil(G.cd),fr=G.cd-Math.floor(G.cd);const sc=1+fr*.5;
+    c.save();c.translate(W/2,340);c.scale(sc,sc);c.font='900 110px system-ui,sans-serif';c.lineWidth=8;c.strokeStyle='rgba(0,0,0,.6)';
+    c.strokeText(n>3?'':String(n),0,0);c.fillStyle=n===1?'#27f3a0':n===2?'#ffd23f':'#ff5468';c.fillText(n>3?'':String(n),0,0);c.restore()}
+}
+
+/* ================= tugashlar ================= */
+function showEnd(html){const e=$('sEnd');e.innerHTML=html;hideAll();e.classList.add('show');mode='ui';$('pauseBtn').classList.remove('show');$('touch').classList.remove('show')}
+ function finalizeRun(won){
+   if(G.ended)return;G.ended=true;
+   S.stats.races++;S.stats.wins+=won?1:0;S.stats.failures+=won?0:1;
+   S.stats.distance+=Math.floor(dist);S.stats.coins+=runCoins*5;
+   S.stats.shots+=G.runShots;S.stats.kills+=G.runKills;S.stats.near+=G.runNear;S.stats.crashes+=G.runCrashes;
+   S.stats.bestScore=Math.max(S.stats.bestScore,score);
+   if(won&&P.lives===3)S.stats.perfect++;
+   if(won){const k=mapIdx+'_'+lvlIdx;if(!S.bestTimes[k]||G.clock<S.bestTimes[k])S.bestTimes[k]=Number(G.clock.toFixed(2))}
+   save();checkAchievements();
+ }
+function levelComplete(){
+  mode='end';
+  const stars=Math.max(1,P.lives),bonus=stars*60,earned=runCoins*5+bonus;
+  S.coins+=earned;
+  const key=mapIdx+'_'+lvlIdx;S.stars[key]=Math.max(S.stars[key]||0,stars);
+  if(lvlIdx+2>S.prog[mapIdx])S.prog[mapIdx]=Math.min(50,lvlIdx+2);
+  if(lvlIdx===49&&mapIdx<2&&S.prog[mapIdx+1]<1)S.prog[mapIdx+1]=1;
+     save();finalizeRun(true);
+   beep(660,.15,'triangle',.07);setTimeout(()=>beep(880,.15,'triangle',.07),150);setTimeout(()=>beep(1320,.3,'triangle',.07),300);
+  const last=lvlIdx===49,mapDone=last&&mapIdx<2;
+  const title=last&&mapIdx===2?'🏆 CHEMPION!':mapDone?'XARITA TUGADI!':'LEVEL TUGADI!';
+  const nextTxt=last?(mapIdx<2?'Keyingi xarita ochildi: '+MAPS[mapIdx+1].name:'Siz 150 ta levelni bosdingiz!'):'Keyingi: level '+(lvlIdx+2);
+  showEnd('<h2>'+title+'</h2>'+
+    '<div class="stars">'+[1,2,3].map(i=>'<span class="'+(i<=stars?'':'off')+'">★</span>').join('')+'</div>'+
+    '<div class="coins">🪙 +'+earned+' <span style="font-size:13px;color:var(--muted)">(tanga '+runCoins*5+' + bonus '+bonus+')</span></div>'+
+    '<p class="sub">'+nextTxt+'</p>'+
+     '<div class="end-details"><div class="meta-card"><strong>'+fmtNum(score)+'</strong><span>BALL</span></div><div class="meta-card"><strong>'+prettyTime(G.clock)+'</strong><span>VAQT</span></div><div class="meta-card"><strong>'+fmtNum(runCoins*5)+'</strong><span>TANGA</span></div></div>'+
+    (last?'':'<button class="btn main big" id="eNext">Keyingi level ▶</button>')+
+    '<button class="btn big" id="eRetry">Qayta o‘ynash</button><button class="btn big" id="eLv">Levellar</button><button class="btn big" id="eGar">Garaj</button>');
+  bindEnd(last?null:[mapIdx,lvlIdx+1]);
+}
+function gameOver(){
+  mode='end';const earned=runCoins*5;S.coins+=earned;save();finalizeRun(false);
+  showEnd('<h2>O‘YIN TUGADI</h2><p class="sub">Mashina urilib ketdi…</p>'+
+    '<div class="coins">🪙 +'+earned+'</div><p class="sub">Masofa: '+Math.floor(dist)+' / '+cfg.goal+' m · Ball: '+fmtNum(score)+' · '+prettyTime(G.clock)+'</p>'+
+    '<button class="btn main big" id="eRetry">Qayta urinish</button><button class="btn big" id="eLv">Levellar</button><button class="btn big" id="eGar">Garaj</button>');
+  bindEnd(null);
+}
+function bindEnd(next){
+  const n=$('eNext');if(n)n.onclick=()=>startLevel(next[0],next[1]);
+  $('eRetry').onclick=()=>startLevel(mapIdx,lvlIdx);
+  $('eLv').onclick=()=>show('sLevels');
+  $('eGar').onclick=()=>show('sGarage');
+}
+
+/* ================= xarita va level menyusi ================= */
+function renderTitle(){
+  $('tCoins').textContent='🪙 '+fmtNum(S.coins);
+  $('homeWins').textContent=fmtNum(S.stats.wins);
+  $('homeCars').textContent=S.owned.length+'/50';
+  $('homeBadges').textContent=S.achievements.length+'/12';
+  const open= S.prog.findIndex(v=>v>0&&v<50);
+  const map=open<0?2:open;
+  $('bContinue').textContent='▶ DAVOM ETTIRISH · '+MAPS[map].name.toUpperCase()+' '+Math.max(1,S.prog[map])+'/50';
+ }
+function renderMaps(){
+  $('mCoins').textContent='🪙 '+S.coins;
+  const box=$('maps');box.innerHTML='';
+  MAPS.forEach((m,i)=>{
+    const b=document.createElement('button');b.className='mapcard';
+    b.style.background=`linear-gradient(120deg,${m.g1},${m.g2} 55%,${m.road})`;
+    const open=S.prog[i]>0;b.disabled=!open;
+    const done=S.prog[i]>=50?'✓ Tugadi':(open?S.prog[i]-1+'/50 o‘tildi':'🔒 Oldingi xaritani tugating');
+    b.innerHTML=`<b>${i+1}. ${m.name}</b><small>${m.sub}</small><span class="prog">${done}</span>`;
+    b.onclick=()=>{mapIdx=i;show('sLevels')};
+    box.appendChild(b)});
+}
+function renderLevels(){
+  $('lCoins').textContent='🪙 '+S.coins;
+  $('lTitle').textContent='XARITA '+(mapIdx+1)+': '+MAPS[mapIdx].name.toUpperCase();
+  const box=$('lvls');box.innerHTML='';
+  for(let n=0;n<50;n++){
+    const b=document.createElement('button');b.className='lv';
+    const unlocked=n<S.prog[mapIdx];b.disabled=!unlocked;
+    const s=S.stars[mapIdx+'_'+n]||0;
+    b.innerHTML=(unlocked?(n+1):'🔒')+'<small>'+(unlocked?'★'.repeat(s)+'☆'.repeat(3-s):'')+'</small>';
+    b.onclick=()=>startLevel(mapIdx,n);
+    box.appendChild(b)}
+}
+
+/* ================= garaj ================= */
+const thumbs=[];
+function carCanvas(c,car,w,h,scale){
+  const x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,c.width,c.height);
+  if(c.width>300){
+    // Ko'rgazma zalidagi metall pol va yumshoq yoritish.
+    const floor=x.createLinearGradient(0,0,0,c.height);
+    floor.addColorStop(0,'rgba(32,44,69,.35)');floor.addColorStop(.5,'rgba(65,77,108,.23)');floor.addColorStop(1,'rgba(6,10,21,.38)');
+    x.fillStyle=floor;x.fillRect(0,0,c.width,c.height);
+    x.save();x.translate(c.width/2,c.height*.54);x.scale(1,.24);
+    const glow=x.createRadialGradient(0,0,20,0,0,340);glow.addColorStop(0,'rgba(225,240,255,.30)');
+    glow.addColorStop(.45,'rgba(96,151,219,.11)');glow.addColorStop(1,'rgba(20,30,40,0)');
+    x.fillStyle=glow;x.beginPath();x.arc(0,0,340,0,TAU);x.fill();x.restore();
+    x.strokeStyle='rgba(190,209,246,.075)';x.lineWidth=1;
+    for(let i=0;i<6;i++){let line=90+i*160;x.beginPath();x.moveTo(line,0);x.lineTo(line,c.height);x.stroke();}
+    x.fillStyle='rgba(215,225,246,.48)';x.font='bold 23px system-ui,sans-serif';
+    x.textAlign='left';x.fillText('AUTO STUDIO  /  TOP VIEW',36,42);
+    x.fillStyle='rgba(255,214,110,.80)';x.textAlign='right';
+    x.fillText(String(car.id+1).padStart(2,'0')+' / 50',c.width-36,c.height-28);
+  }else{
+    const bg=x.createRadialGradient(c.width/2,c.height*.5,2,c.width/2,c.height*.5,c.width*.45);
+    bg.addColorStop(0,'rgba(178,195,228,.30)');bg.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=bg;x.fillRect(0,0,c.width,c.height);
+  }
+  x.save();x.translate(c.width/2,c.height/2);x.rotate(Math.PI/2);x.scale(scale,scale);
+  drawCar(x,0,0,car,{});x.restore();
+}
+function buildGrid(){
+  const g=$('grid');g.innerHTML='';thumbs.length=0;
+  CARS.forEach((car,i)=>{
+    const c=document.createElement('canvas');c.width=145;c.height=100;c.title=car.name;
+    c.onclick=()=>{gIdx=i;renderGarage()};
+    g.appendChild(c);thumbs.push(c);
+    carCanvas(c,car,145,100,1.01);
+  });
+}
+function renderGarage(){
+  $('gCoins').textContent='🪙 '+S.coins;
+  $('gCount').textContent=S.owned.length+'/50';
+   const car=CARS[gIdx],own=S.owned.includes(car.id),effective=tunedCar(car),up=upsFor(gIdx);
+  $('gName').textContent=car.name;
+  const pv=$('gPrev');carCanvas(pv,car,pv.width,pv.height,4.8);
+  const pc=pv.getContext('2d');
+  if(!own){pc.fillStyle='rgba(0,0,0,.12)';pc.fillRect(0,0,pv.width,pv.height);pc.font='44px system-ui';pc.textAlign='right';pc.textBaseline='top';pc.fillText('🔒',pv.width-28,65)}
+  const sts=[['Tezlik',effective.max/325],['Tezlanish',effective.acc/144],['Boshqaruv',effective.hand/1.9],['Nitro',effective.nit/145]].map(s=>[s[0],clamp(s[1],0,1)]);
+  $('gStats').innerHTML=sts.map(s=>'<div class="st"><span>'+s[0]+'</span><div class="bar"><i style="width:'+Math.round(s[1]*100)+'%"></i></div></div>').join('');
+  const act=$('gAct');
+  if(own){act.innerHTML='<button class="btn" id="gSel" '+(S.car===car.id?'disabled':'')+'>'+(S.car===car.id?'✓ Tanlangan':'Tanlash')+'</button>';
+    $('gSel').onclick=()=>{S.car=car.id;save();renderGarage()}}
+  else{act.innerHTML='<button class="btn gold" id="gBuy" '+(S.coins<car.price?'disabled':'')+'>🔒 Sotib olish · 🪙 '+car.price+'</button>';
+    $('gBuy').onclick=()=>{if(S.coins>=car.price){S.coins-=car.price;S.owned.push(car.id);S.car=car.id;save();checkAchievements();beep(900,.1,'triangle',.06);beep(1300,.2,'triangle',.06);renderGarage()}}}
+  const ubox=$('gUpgrades');ubox.innerHTML='';
+   const labels={speed:['🏁 Maksimal tezlik','+9 km/soat'],accel:['🚀 Tezlanish','+8 tezlanish'],grip:['🎮 Boshqaruv','+0.07 sezgirlik'],nitro:['⚡ Nitro kuchi','+11 km/soat']};
+   for(const key of Object.keys(labels)){
+     const val=up[key],price=upgradePrice(car.id,key),full=val>=5;
+     const row=document.createElement('div');row.className='up-row';
+     row.innerHTML='<div><span>'+labels[key][0]+'</span><br><span class="mini-dots">'+('●'.repeat(val)+'○'.repeat(5-val))+'</span> <small>'+labels[key][1]+' · '+val+'/5</small></div>'+
+       '<button class="btn gold" '+(!own||full||S.coins<price?'disabled':'')+'>'+(!own?'🔒':full?'✓ MAX':'🪙 '+fmtNum(price))+'</button>';
+     row.querySelector('button').onclick=()=>{if(!S.owned.includes(gIdx)||val>=5||S.coins<price)return;S.coins-=price;
+       S.upgrades[gIdx]={...up,[key]:val+1};save();beep(940,.12,'triangle',.06,1330);vibe(28);renderGarage()};
+     ubox.appendChild(row);
+   }
+   thumbs.forEach((t,i)=>{t.classList.toggle('sel',i===gIdx);t.classList.toggle('own',S.owned.includes(i))});
+}
+$('gL').onclick=()=>{gIdx=(gIdx+49)%50;renderGarage()};
+$('gR').onclick=()=>{gIdx=(gIdx+1)%50;renderGarage()};
+
+/* ================= rekordlar va sozlamalar ================= */
+ function renderRecords(){
+  $('rCoins').textContent='🪙 '+fmtNum(S.coins);
+  const tiles=[['🏁 G‘alaba','wins'],['📊 Poyga','races'],['🛣 Jami masofa','distance',' m'],['🪙 Yig‘ilgan tanga','coins'],['🏆 Rekord ball','bestScore'],['💥 To‘qnashuv','crashes'],['🎯 Yaqin o‘tish','near'],['🎯 Yo‘q qilingan','kills'],['⭐ Xatosiz g‘alaba','perfect']];
+  $('recordStats').innerHTML=tiles.map(([label,key,unit=''])=>'<div class="meta-card"><strong>'+fmtNum(statCount(key))+unit+'</strong><span>'+label+'</span></div>').join('');
+  $('badges').innerHTML=medals.map(a=>{const ok=S.achievements.includes(a.id),p=achProgress(a);
+    return '<div class="badge-card '+(ok?'unlocked':'locked')+'"><span class="emoji">'+a.icon+'</span><b>'+(ok?'✓ ':'')+a.name+'</b><small>'+a.desc+'</small><small>'+fmtNum(Math.min(p,a.val))+' / '+fmtNum(a.val)+'</small><span class="reward">'+(ok?'✅ OLINDI':'🪙 +'+fmtNum(a.reward))+'</span></div>'}).join('');
+ }
+ let settingsOrigin='sTitle';
+ function openSettings(){settingsOrigin=mode==='pause'?'sPause':'sTitle';
+   if(mode==='pause'){ // freeze gameplay while settings are open
+     $('sPause').classList.remove('show');$('sSettings').classList.add('show');renderSettings();return;
+   }
+   show('sSettings');
+ }
+ function returnSettings(){
+   if(settingsOrigin==='sPause'){$('sSettings').classList.remove('show');$('sPause').classList.add('show');}
+   else show('sTitle');
+ }
+ function renderSettings(){
+   $('settingsCoins').textContent='🪙 '+fmtNum(S.coins);
+   $('setSound').textContent=S.sound?'YOQIQ':'O‘CHIQ';
+   $('setControls').textContent=S.settings.controls==='buttons'?'TUGMALAR':'SURISH';
+   $('setQuality').textContent=S.settings.quality==='high'?'YUQORI':'TEJAMKOR';
+   $('setVibrate').textContent=S.settings.vibrate?'YOQIQ':'O‘CHIQ';
+ }
+ $('settingsBack').onclick=returnSettings;
+ $('setSound').onclick=()=>{toggleSound();renderSettings()};
+ $('setControls').onclick=()=>{S.settings.controls=S.settings.controls==='buttons'?'swipe':'buttons';save();renderSettings()};
+ $('setQuality').onclick=()=>{S.settings.quality=S.settings.quality==='high'?'low':'high';applyQuality();save();renderSettings()};
+ $('setVibrate').onclick=()=>{S.settings.vibrate=!S.settings.vibrate;save();vibe(40);renderSettings()};
+ $('setFullscreen').onclick=async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch(e){toast('To‘liq ekran ushbu brauzerda qo‘llanmaydi')}};
+ $('setReset').onclick=()=>{
+   if(!confirm('DIQQAT! Shu qurilmadagi natijalar o‘chadi. Firebase bulutidagi saqlov O‘CHMAYDI. Davom etilsinmi?'))return;
+   for(const k of ['coins','owned','car','prog','stars','sound','upgrades','achievements','stats','settings','bestTimes'])localStorage.removeItem('tr3_'+k);
+   location.reload();
+ };
+ /* ================= tugmalar ================= */
+function toggleSound(){S.sound=!S.sound;save();initAudio();renderTitle();$('pSound').textContent='🔊 Ovoz: '+(S.sound?'yoqiq':'o‘chiq')}
+$('bContinue').onclick=()=>{let m=S.prog.findIndex(v=>v>0&&v<50);if(m<0)m=2;startLevel(m,Math.max(0,Math.min(49,S.prog[m]-1)))};
+ $('bPlay').onclick=()=>show('sMaps');
+ $('bRecords').onclick=()=>show('sRecords');
+ $('bSettings').onclick=()=>openSettings();
+ $('pSettings').onclick=()=>openSettings();
+$('bGarage').onclick=()=>show('sGarage');
+$('bDuel').onclick=()=>show('sDuel');
+$('settingsCloud').onclick=()=>show('sAccount');
+window.addEventListener('turbo-navigate',e=>{if(['sLeaderboard','sAccount','sTitle','sDuel'].includes(e.detail))show(e.detail)});
+// Ovoz sozlamalar orqali boshqariladi
+$('pSound').onclick=toggleSound;
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>show(b.dataset.back));
+$('pauseBtn').onclick=()=>pauseGame();
+$('pResume').onclick=()=>resumeGame();
+$('pRestart').onclick=()=>{if(MP.active){if(confirm('Poygadan chiqsangiz mag‘lubiyat hisoblanadi. Chiqasizmi?')){window.TurboMultiplayer?.leave(true);endMultiLocal();show('sTitle')}}else startLevel(mapIdx,lvlIdx)};
+$('pLevels').onclick=()=>{if(MP.active){if(confirm('Onlayn poygadan chiqasizmi?')){window.TurboMultiplayer?.leave(true);endMultiLocal();show('sTitle')}}else show('sLevels')};
+function pauseGame(){if(mode!=='play')return;mode='pause';resetKeys();$('pSummary').innerHTML='<div style="font-size:14px;font-weight:900">'+(MP.active?'👥 DUO 5000M (Raqib kutmaydi!)':MAPS[mapIdx].name+' · LEVEL '+(lvlIdx+1))+'</div><p class="sub" style="line-height:1.8;margin-top:9px">🏁 '+Math.floor(dist)+' / '+cfg.goal+' m &nbsp; • &nbsp; ⏱ '+prettyTime(G.clock)+'<br>🪙 '+fmtNum(runCoins*5)+' &nbsp; • &nbsp; ❤️ '+P.lives+' &nbsp; • &nbsp; 🔫 '+P.ammo+'</p>';
+  $('sPause').classList.add('show');$('touch').classList.remove('show');$('pauseBtn').classList.remove('show')}
+ function resetKeys(){for(const k of Object.keys(keys))keys[k]=0;touch.down=false;for(const b of $('touch').querySelectorAll('button'))b.classList.remove('on')}
+function resumeGame(){if(mode!=='pause')return;mode='play';$('sPause').classList.remove('show');$('pauseBtn').classList.add('show');refreshTouchUI();last=performance.now()}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseGame()});
+
+/* ================= kirish ================= */
+const isTouchDevice=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+ let TOUCH=isTouchDevice;
+ function refreshTouchUI(){ $('touch').classList.toggle('show',mode==='play'&&isTouchDevice&&S.settings.controls==='buttons') }
+ for(const [id,key] of [['tL','l'],['tR','r'],['tB','b'],['tN','n'],['tF','f']]){
+   const el=$(id);const release=e=>{if(el._pid!==e.pointerId)return;keys[key]=0;el.classList.remove('on');el._pid=null;
+     try{el.releasePointerCapture(e.pointerId)}catch(_){} };
+   el.addEventListener('pointerdown',e=>{if(mode!=='play')return;e.preventDefault();e.stopPropagation();initAudio();
+     el._pid=e.pointerId;try{el.setPointerCapture(e.pointerId)}catch(_){}keys[key]=1;if(key==='f')fireReq=true;el.classList.add('on');vibe(10)});
+   for(const type of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(type,release);
+ }
+const km={ArrowLeft:'l',a:'l',A:'l',ArrowRight:'r',d:'r',D:'r',ArrowDown:'b',s:'b',S:'b',' ':'n',Shift:'n',ArrowUp:'n',w:'n',W:'n',k:'f',K:'f'};
+addEventListener('keydown',e=>{
+  const kx=e.code==='KeyK'?'f':km[e.key];if(kx){keys[kx]=1;if(kx==='f'&&!e.repeat)fireReq=true;if(mode==='play')e.preventDefault()}
+  if(e.key==='p'||e.key==='P'||e.key==='Escape'){if($('sSettings').classList.contains('show'))returnSettings();else if(mode==='play')pauseGame();else if(mode==='pause')resumeGame()}
+});
+addEventListener('keyup',e=>{const kx=e.code==='KeyK'?'f':km[e.key];if(kx)keys[kx]=0});
+addEventListener('blur',()=>{resetKeys();if(mode==='play')pauseGame()});
+const wrapEl=$('wrap');
+const toG=e=>{const r=wrapEl.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width*W,y:(e.clientY-r.top)/r.height*H}};
+function fireBurst(){
+  if(!P||G.dead||G.fin)return;const n=Math.min(3,P.ammo);if(!n)return;
+  for(let i=0;i<n;i++)bullets.push({x:P.x,y:PY-52-i*18,dead:false});
+  P.ammo-=n;G.runShots+=n;beep(1500,.06,'square',.04,700);
+}
+let tPid=null,lastTap=0,lastTapPos=null;
+wrapEl.addEventListener('pointerdown',e=>{
+  if(mode!=='play'||e.target.closest('button'))return;
+  e.preventDefault();
+  if(S.settings.controls!=='swipe')return;
+   initAudio();
+  const p=toG(e);tPid=e.pointerId;
+  try{wrapEl.setPointerCapture(e.pointerId)}catch(_){}
+  touch.down=true;touch.x0=touch.x=p.x;touch.y0=touch.y=p.y;
+  const now=performance.now();
+  if(now-lastTap<320&&lastTapPos&&Math.hypot(p.x-lastTapPos.x,p.y-lastTapPos.y)<90){fireBurst();lastTap=0;lastTapPos=null}
+  else{lastTap=now;lastTapPos=p}
+});
+wrapEl.addEventListener('pointermove',e=>{
+  if(e.pointerId!==tPid)return;const p=toG(e);touch.x=p.x;touch.y=p.y;
+});
+const endTouch=e=>{if(e.pointerId!==tPid)return;touch.down=false;tPid=null};
+wrapEl.addEventListener('pointerup',endTouch);
+wrapEl.addEventListener('pointercancel',endTouch);
+wrapEl.addEventListener('lostpointercapture',endTouch);
+
+
+/* ================= o‘lchov ================= */
+function fit(){
+  const cs=getComputedStyle(document.documentElement);
+  const vw=document.documentElement.clientWidth;
+  const vh=document.documentElement.clientHeight-parseFloat(cs.paddingTop||0)-parseFloat(cs.paddingBottom||0);
+  const s=Math.min(vw/W,vh/H);
+  $('wrap').style.width=W*s+'px';$('wrap').style.height=H*s+'px';
+  cv.style.width=W*s+'px';cv.style.height=H*s+'px';
+  $('ui').style.transform='scale('+s+')';
+}
+addEventListener('resize',fit);fit();
+
+/* ================= asosiy sikl ================= */
+let last=performance.now();
+function frame(now){
+     const dt=Math.min(.033,Math.max(0,(now-last)/1000));last=now;
+  ctx.setTransform(RES,0,0,RES,0,0);
+  if(mode==='play'){update(dt);if(mode==='play'||mode==='end')render()}
+  else if(mode==='pause'){render()}
+  else{ // orqa fon: menyu
+    time+=dt;LG=[];updateDecor(dt,160*K*1.2);off+=160*K*1.2*dt;
+    if(!cfg)cfg=levelCfg(0,0);
+    drawRoad();for(const d of D)drawDecor(d);weather();
+  }
+  if(mode==='play'&&!P)mode='ui';
+  engineSound();
+  requestAnimationFrame(frame);
+}
+mapIdx=0;L=MAPS[0];cfg=levelCfg(0,0);setTheme();buildGrid();renderTitle();
+show('sTitle');
+requestAnimationFrame(frame);
+})();
+</script>
+<script type="module">
+// Firebase 13.0.0 | marra-1 | Email/Password Auth + Cloud Firestore
+(async()=>{
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const status=$('cloudStatus'),info=$('cloudSyncInfo');
+  const bridge=window.TurboRacerBridge;
+  let active=false,user=null,remote=null,profileName='',saving=false,dirty=null,authSeq=0,writingUid='',flushTimer=0,app=null,db=null,auth=null;
+  let appApi,authApi,dbApi;
+  const config={
+    apiKey:'AIzaSyBJI6yTxGKKkoeTmS7lUAqE0uWUzyMGcHQ',
+    authDomain:'marra-1.firebaseapp.com',
+    projectId:'marra-1',
+    storageBucket:'marra-1.firebasestorage.app',
+    messagingSenderId:'46109938701',
+    appId:'1:46109938701:web:4b6d3ab8f1abc93a893144',
+    measurementId:'G-FBKJCZ4M0P'
+  };
+  function state(msg,kind=''){status.textContent=msg;status.className='cloud-status'+(kind?' '+kind:'') }
+  function errText(e){const code=String(e?.code||'');const known={
+    'auth/invalid-email':'Email noto‘g‘ri yozilgan.',
+    'auth/invalid-credential':'Email yoki parol xato.',
+    'auth/wrong-password':'Parol xato.',
+    'auth/email-already-in-use':'Bu email ro‘yxatdan o‘tgan. Kirish tugmasini bosing.',
+    'auth/weak-password':'Parol juda qisqa. Kamida 6 belgi yozing.',
+    'auth/operation-not-allowed':'Firebase Console → Authentication → Sign-in method → Email/Password ni yoqing.',
+    'auth/unauthorized-domain':'Bu sayt domenini Firebase Authentication → Settings → Authorized domains ga qo‘shing.',
+    'permission-denied':'Cloud Firestore qoidalarida (Rules) ruxsat yo‘q. Berilgan firestore.rules ni joylang.',
+    'failed-precondition':'Firestore ma’lumotlar bazasi yoqilmagan yoki indeksi kerak.',
+    'unavailable':'Firebase serveriga ulanish yo‘q. Internetni tekshiring.',
+    'auth/network-request-failed':'Tarmoq xatosi. Internetni tekshiring.'
+  };return known[code]||known[code.replace('firestore/','')]||(e?.message?String(e.message).slice(0,180):'Noma’lum xato')}
+  function displaySigned(){ $('cloudForm').hidden=!!user;$('cloudSigned').hidden=!user;
+    $('cloudChoice').hidden=!user||active||remote===undefined;
+    $('cloudPlayerName').textContent='👤 '+(profileName||'Turbo Poygachi');
+    $('cloudUserEmail').textContent=user?.email||'';
+    info.textContent=active?'☁️ Sinxronlash yoqilgan. O‘zgarishlar avtomatik saqlanadi.':'☁️ Sinxronlashni boshlash uchun pastda saqlov manbasini tanlang.';
+  }
+  function nickname(text,uid){const s=String(text||'').replace(/[<>\\]/g,'').trim().slice(0,24);return s||'Poygachi '+String(uid||'').slice(0,5)}
+  function formatSummary(data){const d=data||{};const owned=Array.isArray(d.owned)?d.owned.length:0;
+    const n=Number(d.stats?.wins)||0;const money=Number(d.coins)||0;
+    return `${n} g‘alaba · ${owned} mashina · ${Math.floor(money)} tanga`;}
+  function askChoice(isExisting){displaySigned();$('cloudChoice').hidden=false;
+    $('cloudChoiceInfo').textContent=isExisting
+      ?`Bulut: ${formatSummary(remote)}. Ushbu qurilma: ${formatSummary(bridge.read())}. Qaysi biri asosiy bo‘lsin?`
+      :`Bu akkauntda hali bulut saqlovi yo‘q. Qurilmangizdagi natijalarni (${formatSummary(bridge.read())}) bulutga yuborishingiz mumkin.`;
+    $('cloudLoad').hidden=!isExisting;
+    $('cloudPush').textContent=isExisting?'⬆️ QURILMADAGI NATIJALAR BILAN BULUTNI ALMASHTIRISH':'⬆️ SHU QURILMADAGI NATIJALARNI BULUTGA SAQLASH';
+    state(isExisting?'☁️ Bulut saqlovi topildi. Natijalar manbasini tanlang.':'☁️ Bulutda yangi profil: saqlashni boshlang.','warn');
+  }
+  function disableAuthButtons(v){for(const id of ['cloudLogin','cloudSignup','cloudResetPassword'])$(id).disabled=v;}
+  function queue(snapshot){if(!active||!user)return;dirty=snapshot;clearTimeout(flushTimer);flushTimer=setTimeout(flush,850)}
+  async function flush(){if(saving||!active||!user||!dirty)return;
+    saving=true;const uid=user.uid;let canRetry=false;
+    try{
+      while(dirty&&active&&user?.uid===uid){
+        const snap=dirty;dirty=null;
+        await dbApi.setDoc(dbApi.doc(db,'players',uid),{
+          game:snap,nickname:profileName,version:1,updatedAt:dbApi.serverTimestamp()
+        },{merge:true});
+        if(!active||user?.uid!==uid)break;
+        await dbApi.setDoc(dbApi.doc(db,'leaderboard',uid),{
+          nickname:profileName,wins:Math.min(1000000000,snap.stats?.wins||0),
+          bestScore:Math.min(1000000000,snap.stats?.bestScore||0),
+          distance:Math.min(1000000000000,snap.stats?.distance||0),
+          stars:Object.values(snap.stars||{}).reduce((sum,v)=>sum+(Number(v)||0),0),
+          updatedAt:dbApi.serverTimestamp()
+        },{merge:true});
+      }
+      if(active&&user?.uid===uid){state('✅ Firebase: bulutga saqlandi');info.textContent='✅ Natijalar bulutda saqlangan. Keyingi o‘zgarishlar avtomatik yuboriladi.';}
+    }catch(e){
+      const code=String(e?.code||'');canRetry=['unavailable','deadline-exceeded','cancelled','auth/network-request-failed','resource-exhausted'].includes(code)||!navigator.onLine;
+      if(active&&user?.uid===uid){if(!dirty)dirty=bridge.read();state('⚠️ Bulutga saqlanmadi: '+errText(e),'error');info.textContent='Natijalar mahalliy saqlanmoqda. Tekshirgach «HOZIR SAQLASH» tugmasini bosing.';}
+    }finally{saving=false;if(dirty&&active&&navigator.onLine&&canRetry)clearTimeout(flushTimer),flushTimer=setTimeout(flush,15000)}
+  }
+  window.TurboCloud={onLocalSave:queue,isActive:()=>active,syncNow:async()=>{if(active){dirty=bridge.read();await flush()}}};
+  async function upload(){if(!user)return;
+    if(remote&&!confirm('DIQQAT: Bulutdagi oldingi natijalar SHU QURILMADAGI progress bilan almashtiriladi. Davom etilsinmi?'))return;
+    active=true;remote=undefined;$('cloudChoice').hidden=true;displaySigned();dirty=bridge.read();state('☁️ Bulutga yuborilmoqda...');await flush();
+  }
+  function downloadSave(){if(!user||!remote)return;
+    if(!confirm('Bulutdagi progress qurilmadagi hozirgi progressni almashtiradi. Davom etilsinmi?'))return;
+    try{localStorage.setItem('tr3_backup_before_cloud',JSON.stringify({at:new Date().toISOString(),game:bridge.read()}))}catch(_){/* private browsing */}
+    try{bridge.apply(remote);remote=undefined;active=true;displaySigned();$('cloudChoice').hidden=true;state('✅ Bulutdagi progress yuklandi. Sinxronlash yoqilgan.');}
+    catch(e){state('Bulut saqlovini ochishda xato: '+errText(e),'error')}
+  }
+  async function refreshRanking(){if(!db)return;
+    $('leaderList').replaceChildren();$('leaderState').textContent='Reyting yuklanmoqda…';
+    try{
+      const q=dbApi.query(dbApi.collection(db,'leaderboard'),dbApi.orderBy('wins','desc'),dbApi.limit(25));
+      const rows=await dbApi.getDocs(q);$('leaderState').textContent=rows.empty?'Reytingda hozircha hech kim yo‘q.':'✅ Eng kuchli 25 o‘yinchi';
+      let n=0;rows.forEach(snap=>{
+        const r=snap.data(),el=document.createElement('div');el.className='leader-row'+(snap.id===user?.uid?' me':'');
+        const a=document.createElement('span');a.textContent=(++n===1?'🥇':n===2?'🥈':n===3?'🥉':'#'+n);
+        const b=document.createElement('b');b.textContent=nickname(r.nickname,snap.id);
+        const c=document.createElement('strong');c.textContent=String(Math.floor(Math.max(0,Number(r.wins)||0)))+' 🏁';
+        const d=document.createElement('span');d.textContent=String(Math.floor(Math.max(0,Number(r.bestScore)||0)))+' ball';
+        el.append(a,b,c,d);$('leaderList').appendChild(el);
+      });
+    }catch(e){$('leaderState').textContent='⚠️ '+errText(e)}
+  }
+  function setPage(){displaySigned();}
+  $('cloudLogin').onclick=async()=>{
+    if(!auth){state('Firebase tayyor emas.','error');return;}
+    const email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||!password){state('Email va parolni kiriting.','warn');return}
+    disableAuthButtons(true);try{await authApi.signInWithEmailAndPassword(auth,email,password)}
+    catch(e){state('❌ '+errText(e),'error')}finally{disableAuthButtons(false)}
+  };
+  $('cloudSignup').onclick=async()=>{
+    if(!auth){state('Firebase tayyor emas.','error');return;}
+    const email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||password.length<6){state('To‘g‘ri email va 6+ belgili parol kiriting.','warn');return}
+    profileName=nickname($('cloudNick').value,'new');disableAuthButtons(true);
+    try{await authApi.createUserWithEmailAndPassword(auth,email,password)}
+    catch(e){state('❌ '+errText(e),'error')}finally{disableAuthButtons(false)}
+  };
+  $('cloudResetPassword').onclick=async()=>{
+    if(!auth)return;const email=$('cloudEmail').value.trim();if(!email){state('Parolni tiklash uchun emailingizni kiriting.','warn');return}
+    disableAuthButtons(true);try{await authApi.sendPasswordResetEmail(auth,email);state('📩 Agar email ro‘yxatdan o‘tgan bo‘lsa, tiklash xati yuboriladi.')}
+    catch(e){state('❌ '+errText(e),'error')}finally{disableAuthButtons(false)}
+  };
+  $('cloudLogout').onclick=async()=>{if(!auth)return;
+    if(dirty&&!confirm('Bulutga hali saqlanmagan o‘zgarishlar bor. Chiqilsinmi?'))return;
+    active=false;dirty=null;clearTimeout(flushTimer);try{await authApi.signOut(auth);state('Akkauntdan chiqdingiz. Natijalar qurilmada qoldi.')}catch(e){state(errText(e),'error')}
+  };
+  $('cloudLoad').onclick=downloadSave;$('cloudPush').onclick=upload;
+  $('cloudSyncNow').onclick=async()=>{if(!active){state('Avval bulut saqlovini tanlang.','warn');return}dirty=bridge.read();state('↻ Firebase bilan sinxronlash…');await flush()};
+  $('cloudGoRanking').onclick=()=>window.dispatchEvent(new CustomEvent('turbo-navigate',{detail:'sLeaderboard'}));
+  $('leaderRefresh').onclick=refreshRanking;
+  window.addEventListener('turbo-screen',e=>{if(e.detail==='sLeaderboard')refreshRanking();if(e.detail==='sAccount')setPage()});
+  window.addEventListener('online',()=>{if(active&&dirty){clearTimeout(flushTimer);flushTimer=setTimeout(flush,600)}});
+  try{
+    const v='13.0.0';
+    [appApi,authApi,dbApi]=await Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${v}/firebase-auth.js`),
+      import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`)
+    ]);
+    app=appApi.initializeApp(config);auth=authApi.getAuth(app);db=dbApi.getFirestore(app);
+    window.TurboFirebaseRefs={auth,db,dbApi};
+    window.dispatchEvent(new CustomEvent('turbo-firebase-ready',{detail:window.TurboFirebaseRefs}));
+    // Analytics is optional. Do not let ad blockers or unsupported browsers break Auth/Firestore.
+    import('https://www.gstatic.com/firebasejs/13.0.0/firebase-analytics.js').then(async mod=>{
+      if(await mod.isSupported()){const analytics=mod.getAnalytics(app);window.addEventListener('turbo-game-event',e=>{try{mod.logEvent(analytics,e.detail.event,e.detail.params)}catch(_){}})}
+    }).catch(()=>{});
+    state('✅ Firebase SDK tayyor. Kirish uchun akkaunt tugmasini bosing.');
+    authApi.onAuthStateChanged(auth,async signed=>{
+      window.dispatchEvent(new CustomEvent('turbo-auth-state',{detail:{uid:signed?.uid||null,email:signed?.email||null}}));
+      const seq=++authSeq;active=false;dirty=null;clearTimeout(flushTimer);user=signed;remote=undefined;
+      if(!user){profileName='';displaySigned();state('🎮 Mehmon rejimi: natijalar qurilmada saqlanadi.');return}
+      state('☁️ Bulut saqlovi tekshirilmoqda…');displaySigned();
+      try{
+        const docSnap=await dbApi.getDoc(dbApi.doc(db,'players',user.uid));if(seq!==authSeq)return;
+        profileName=nickname(docSnap.exists()?docSnap.data().nickname:profileName,user.uid);
+        remote=docSnap.exists()&&docSnap.data().game?docSnap.data().game:null;
+        askChoice(!!remote);
+      }catch(e){if(seq!==authSeq)return;remote=undefined;displaySigned();state('❌ Cloud Firestore: '+errText(e),'error')}
+    },e=>state('❌ Auth: '+errText(e),'error'));
+  }catch(e){state('⚠️ Firebase modullari yuklanmadi. Internet va HTTPS / localhost ni tekshiring: '+errText(e),'error')}
+})();
+</script>
+
+<script type="module">
+/* ======== Firestore DUO: ikki akkaunt · bitta xona · 5000 metr ======== */
+(()=>{
+ 'use strict';
+ const $=id=>document.getElementById(id),g=window.TurboMPGame;
+ let fb=null,unsubRoom=null,unsubPeer=null,unsubMine=null,room=null,roomData=null,role='',uid='',self=null,other=null,
+     localResult=null,pending=false,lastSent=0,sendBusy=false,latest=null,runSerial=0;
+ const roomLabel=$('duelCode'),notice=$('duelNotice');
+ const log=(msg,error=false)=>{notice.textContent=msg;notice.className='cloud-status'+(error?' error':'')};
+ const cleanName=(v)=>String(v||'Poygachi').replace(/[<>]/g,'').trim().slice(0,20)||'Poygachi';
+ const codeFrom=(str)=>String(str||'').toUpperCase().replace(/[^ABCDEFGHJKLMNPQRSTUVWXYZ23456789]/g,'').slice(0,8);
+ function genCode(){const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',a=new Uint8Array(8);crypto.getRandomValues(a);return Array.from(a,i=>alphabet[i%alphabet.length]).join('')}
+ const api=()=>fb?.dbApi;
+ const roomRef=(code)=>api().doc(fb.db,'races',code);
+ const racerRef=(code,id)=>api().doc(fb.db,'races',code,'racers',id);
+ function username(){const inp=$('cloudNick').value;const mail=fb?.auth.currentUser?.email||'';return cleanName(inp||mail.split('@')[0]||'Poygachi')}
+ function setButtons(wait){pending=wait;for(const k of ['duelCreate','duelJoin','duelLeave'])$(k).disabled=wait}
+ function errors(e){const code=String(e?.code||'');if(code.includes('permission-denied'))return 'Firestore Rules yangilanmagan. ZIP ichidagi firestore.rules ni Firebase → Firestore → Rules ga joylang.';
+   if(code.includes('unavailable'))return 'Internet uzildi yoki Firestore vaqtincha ishlamayapti.';
+   return e?.message||String(e)}
+ function hasLogin(){if(!fb){log('Firebase ulanmoqda…');return false}
+   if(!fb.auth.currentUser){log('Avval Sozlamalar → Firebase akkauntga kiring.',true);return false}
+   return true}
+ function clearListeners(){for(const cb of [unsubRoom,unsubPeer,unsubMine])if(cb)try{cb()}catch(_){}unsubRoom=unsubPeer=unsubMine=null;runSerial++}
+ function displayLobby(){ $('duelNew').hidden=!!room;$('duelLobby').hidden=!room;roomLabel.textContent=room||'--------';
+   $('duelHost').textContent=role==='host'?'Siz':cleanName(other?.nickname||'Do‘st');
+   $('duelGuest').textContent=role==='guest'?'Siz':roomData?.guestUid?cleanName(other?.nickname||'Do‘st'):'Kutilmoqda…';
+ }
+ function listenPeer(code,otherUid){if(unsubPeer){unsubPeer();unsubPeer=null}other=null;g.peer(null);
+   if(!otherUid)return;
+   const serial=runSerial;
+   unsubPeer=api().onSnapshot(racerRef(code,otherUid),snap=>{
+     if(serial!==runSerial)return;
+     other=snap.exists()?snap.data():null;
+     if(other){g.peer(other);displayLobby();if(localResult)showResult();}
+   },err=>log('Raqibni kuzatishda xato: '+errors(err),true));
+ }
+ function listenMine(code,myUid){if(unsubMine)unsubMine();const serial=runSerial;
+   unsubMine=api().onSnapshot(racerRef(code,myUid),snap=>{
+     if(serial!==runSerial)return;
+     self=snap.exists()?snap.data():null;
+     if(localResult)showResult();
+   },err=>log('O‘yinchi ma’lumotida xato: '+errors(err),true));
+ }
+ function listenRoom(code){const serial=runSerial;
+   unsubRoom=api().onSnapshot(roomRef(code),snap=>{
+     if(serial!==runSerial)return;
+     if(!snap.exists()){log('Xona yopilgan yoki o‘chirilgan.',true);g.exit();clearListeners();room=null;displayLobby();return}
+     const data=snap.data();roomData=data;
+     if(data.hostUid!==uid&&data.guestUid!==uid){log('Bu xonaga kirish huquqingiz yo‘q.',true);return}
+     const otherUid=role==='host'?data.guestUid:data.hostUid;
+     if(otherUid&&otherUid!==(role==='host'?other?.uid:null)&&!unsubPeer)listenPeer(code,otherUid);
+     displayLobby();
+     if(data.status==='waiting'){
+       log('✅ Xona tayyor. Kodni do‘stingizga yuboring.');$('duelWait').textContent='Ikkinchi o‘yinchi kod bilan kirsa, 5 soniyada start!';
+     }else if(data.status==='racing'){
+       $('duelWait').textContent='✅ Ikkala o‘yinchi ulandi. Poyga boshlanmoqda…';log('🏁 DUO 5000M!');
+       if(!g.isActive()&&!localResult)g.launch({code,mapIdx:data.mapIdx,seed:data.seed,role,startAtMs:data.startAtMs});
+     }
+   },err=>log('Xona xatosi: '+errors(err),true));
+ }
+ async function create(){if(pending||!hasLogin())return;
+   setButtons(true);try{
+     await internalLeave(false);
+     uid=fb.auth.currentUser.uid;role='host';const code=genCode();const ref=roomRef(code),db=api();
+     await db.runTransaction(fb.db,async transaction=>{
+       const old=await transaction.get(ref);if(old.exists())throw new Error('Kod to‘qnashdi. Qaytadan bosing.');
+       transaction.set(ref,{hostUid:uid,guestUid:null,status:'waiting',mapIdx:Number($('duelMap').value)||0,
+         seed:Math.floor(Math.random()*2147483647),startAtMs:0,createdAt:db.serverTimestamp(),expiresAtMs:Date.now()+15*60*1000});
+     });
+     room=code;roomData=null;localResult=null;
+     await db.setDoc(racerRef(code,uid),{uid,nickname:username(),carId:window.TurboRacerBridge?.read()?.car||0,
+        dist:0,x:196,speed:0,lives:3,status:'ready',finishedAt:null,elapsedMs:0,updatedAt:db.serverTimestamp()});
+     clearListeners();listenMine(code,uid);listenRoom(code);displayLobby();
+   }catch(e){log('❌ Xona ochilmadi: '+errors(e),true)}finally{setButtons(false)}
+ }
+ async function join(){if(pending||!hasLogin())return;
+   const code=codeFrom($('duelInput').value);
+   if(code.length!==8){log('8 belgili xona kodini kiriting.',true);return}
+   setButtons(true);try{
+     await internalLeave(false);
+     uid=fb.auth.currentUser.uid;role='guest';const db=api();
+     const data=await db.runTransaction(fb.db,async transaction=>{
+       const ref=roomRef(code),snap=await transaction.get(ref);
+       if(!snap.exists())throw new Error('Bunday xona topilmadi.');
+       const data=snap.data();
+       if(data.hostUid===uid)throw new Error('O‘zingiz yaratgan xonaga ikkinchi marta kira olmaysiz.');
+       if(data.status!=='waiting'||data.guestUid!==null)throw new Error('Bu xona allaqachon band.');
+       if(Date.now()>data.expiresAtMs)throw new Error('Xona eskirgan. Yangi xona oching.');
+       transaction.update(ref,{guestUid:uid,status:'racing',startAtMs:Date.now()+6500});
+       return data;
+     });
+     room=code;roomData={...data,guestUid:uid,status:'racing'};localResult=null;
+     await db.setDoc(racerRef(code,uid),{uid,nickname:username(),carId:window.TurboRacerBridge?.read()?.car||0,
+       dist:0,x:laneXPlaceholder(),speed:0,lives:3,status:'ready',finishedAt:null,elapsedMs:0,updatedAt:db.serverTimestamp()});
+     clearListeners();listenMine(code,uid);listenPeer(code,data.hostUid);listenRoom(code);displayLobby();
+   }catch(e){log('❌ Ulanmadi: '+errors(e),true)}finally{setButtons(false)}
+ }
+ function laneXPlaceholder(){return 282}
+ function publish(d){if(!g.isActive()||!room||localResult||!fb)return;
+   latest=d;
+   if(sendBusy||Date.now()-lastSent<500)return;
+   lastSent=Date.now();sendBusy=true;
+   const code=room,myUid=uid,patch={...latest,status:'racing',updatedAt:api().serverTimestamp()};
+   api().updateDoc(racerRef(code,myUid),patch).catch(err=>{if(code===room)log('⚠️ Sinxronlash: '+errors(err),true)})
+     .finally(()=>{sendBusy=false;});
+ }
+ async function finish(status,data){if(!room||localResult)return;
+   localResult=status;
+   const code=room,myUid=uid;
+   try{await api().updateDoc(racerRef(code,myUid),{
+     ...data,dist:Math.min(5000,Math.max(0,data.dist||0)),status,
+     finishedAt:api().serverTimestamp(),updatedAt:api().serverTimestamp()
+   });}catch(e){log('Natija serverga yozilmadi: '+errors(e),true)}
+   showResult();
+ }
+ function showResult(){if(!localResult)return;
+   const el=$('duelEndState');if(!el)return;
+   if(!self||!other){el.textContent='⏳ Raqib bilan ma’lumotlar sinxronlanmoqda…';return}
+   if(!['finished','dnf'].includes(self.status)){el.textContent='⏳ Natijangiz Firestore serverida tasdiqlanmoqda…';return}
+   const meF=self.status==='finished',themF=other.status==='finished';
+   const otherDone=themF||other.status==='dnf';
+   if(!otherDone){
+     el.innerHTML='<b>'+(meF?'🏁 Siz finishga yetdingiz!':'💥 Sizning 3 hayotingiz tugadi.')+'</b><p class="cloud-info">Raqib hali yo‘lda. '+Math.round(other.dist||0)+'/5000 m. Natija avtomatik yangilanadi.</p>';
+     return;
+   }
+   let winner;
+   if(meF!==themF)winner=meF;
+   else if(meF&&themF){const a=self.finishedAt?.toMillis?.()||Infinity,b=other.finishedAt?.toMillis?.()||Infinity;
+     if(!Number.isFinite(a)||!Number.isFinite(b)){el.textContent='⏳ Finish vaqtini serverdan kutyapmiz…';return}
+     winner=a===b?null:a<b;
+   }else winner=self.dist===other.dist?null:self.dist>other.dist;
+   el.innerHTML='<div style="font-size:28px;font-weight:900;color:'+(winner===true?'#ffc83d':'#a7e8ff')+'">'+(winner===null?'🤝 DURANG':winner?'🏆 SIZ G‘OLIBSIZ!':'🥈 DO‘STINGIZ YUTDI')+'</div>'+
+     '<p class="sub">Siz: '+Math.round(self.dist)+'/5000 m · Raqib: '+Math.round(other.dist)+'/5000 m</p>';
+ }
+ async function internalLeave(markDnf){
+   const code=room,myUid=uid,current=roomData,currentRole=role;
+   if(!code)return;
+   clearListeners();room=null;roomData=null;other=null;self=null;localResult=null;displayLobby();
+   if(markDnf&&fb&&current?.status==='racing'){
+     try{await api().updateDoc(racerRef(code,myUid),{status:'dnf',dist:Math.max(0,Math.floor(latest?.dist||0)),
+       finishedAt:api().serverTimestamp(),updatedAt:api().serverTimestamp()})}catch(_){/* network lost */}
+   }
+   if(fb&&currentRole==='host'&&current?.status==='waiting'){
+     try{await api().deleteDoc(roomRef(code))}catch(_){/* expired room */}
+   }
+ }
+ function leave(markDnf=true){if(g.isActive())g.stop();return internalLeave(markDnf)}
+ $('duelBack').onclick=()=>{if(room){log('Avval “XONADAN CHIQISH” tugmasini bosing.',true);return}window.dispatchEvent(new CustomEvent('turbo-navigate',{detail:'sTitle'}))};
+ $('duelCreate').onclick=create;$('duelJoin').onclick=join;
+ $('duelLeave').onclick=async()=>{if(pending)return;if(g.isActive()&&!confirm('Onlayn poygadan chiqishni tasdiqlaysizmi?'))return;
+   await leave(true);log('🚪 Xonadan chiqdingiz. Boshqasini ochishingiz mumkin.');window.dispatchEvent(new CustomEvent('turbo-navigate',{detail:'sTitle'}))};
+ $('duelAccount').onclick=()=>window.dispatchEvent(new CustomEvent('turbo-navigate',{detail:'sAccount'}));
+ $('duelInput').addEventListener('input',e=>{const fixed=codeFrom(e.target.value);if(e.target.value!==fixed)e.target.value=fixed});
+ window.TurboMultiplayer={publish,finish,reconcile:showResult,leave,isConnected:()=>!!room};
+ window.addEventListener('turbo-firebase-ready',e=>{fb=e.detail;log('✅ Firebase tayyor. Akkauntga kiring yoki xona oching.')});
+ window.addEventListener('turbo-auth-state',e=>{const signed=e.detail.uid;if(room&&signed!==uid){void leave(false);g.exit()}
+   log(signed?'✅ Akkaunt ulangan. Do‘st bilan o‘ynash mumkin.':'🔐 DUO uchun Firebase akkauntingizga kiring.',!signed)});
+ if(window.TurboFirebaseRefs)fb=window.TurboFirebaseRefs;
+ if(fb?.auth.currentUser)log('✅ Firebase akkaunti ulangan. Xona oching!');
+})();
+</script>
+</body>
+</html>
