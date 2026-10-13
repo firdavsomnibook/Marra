@@ -194,7 +194,7 @@ h2{font-size:30px;line-height:1.1;letter-spacing:-.8px;text-align:center}
     <section id="sTitle" class="scr show">
       <div class="brand-kicker">★ ULTIMATE ARCADE EDITION ★</div>
       <div class="hero-brand"><h1>TURBO<span>RACER</span></h1><p class="hero-lead">Cheksiz tezlik. Katta garaj. Haqiqiy chempionlik sari poyga.</p></div>
-      <span class="pill">● 3 TA XARITA &nbsp;•&nbsp; 150 LEVEL &nbsp;•&nbsp; 50 MASHINA</span>
+      <span class="pill">● 3 TA XARITA &nbsp;•&nbsp; 150 LEVEL &nbsp;•&nbsp; 100+ MASHINA</span>
       <div class="home-meta">
         <div class="meta-card"><strong id="homeWins">0</strong><span>G‘alabalar</span></div>
         <div class="meta-card"><strong id="homeCars">1/50</strong><span>Mashinalar</span></div>
@@ -260,7 +260,7 @@ h2{font-size:30px;line-height:1.1;letter-spacing:-.8px;text-align:center}
         <div class="tiny-label">🔧 MASHINANI KUCHAYTIRISH</div>
         <div id="gUpgrades" class="garage-up"></div>
       </div>
-      <div class="tiny-label">🏎 AVTOMOBILLAR KOLLEKSIYASI (50 TA)</div>
+      <div class="tiny-label">🏎 AVTOMOBILLAR KOLLEKSIYASI (108 TA)</div>
       <div id="grid"></div>
     </section>
 
@@ -363,7 +363,7 @@ const S={coins:st.get('coins',0),owned:st.get('owned',[0]),car:st.get('car',0),
   settings:st.get('settings',{controls:'buttons',quality:'high',vibrate:true}),bestTimes:st.get('bestTimes',{})};
 const STAT_DEFAULT={races:0,wins:0,failures:0,distance:0,coins:0,shots:0,kills:0,near:0,crashes:0,bestScore:0,perfect:0};
   if(!Array.isArray(S.owned))S.owned=[0];
-  S.owned=Array.from(new Set([0,...S.owned.filter(v=>Number.isInteger(v)&&v>=0&&v<50)]));
+  S.owned=Array.from(new Set([0,...S.owned.filter(v=>Number.isInteger(v)&&v>=0&&v<108)]));
   if(!Array.isArray(S.prog)||S.prog.length!==3)S.prog=[1,0,0];
   S.prog=S.prog.map((v,i)=>Math.max(i===0?1:0,Math.min(50,Number(v)||0)));
   if(!S.owned.includes(S.car))S.car=0;
@@ -384,7 +384,7 @@ const STAT_DEFAULT={races:0,wins:0,failures:0,distance:0,coins:0,shots:0,kills:0
     if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Saqlov ma’lumotlari noto‘g‘ri');
     const num=(v,min=0,max=1e9)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Number(v))):min;
     S.coins=Math.floor(num(raw.coins));
-    S.owned=Array.from(new Set([0,...(Array.isArray(raw.owned)?raw.owned:[]).filter(v=>Number.isInteger(v)&&v>=0&&v<50)]));
+    S.owned=Array.from(new Set([0,...(Array.isArray(raw.owned)?raw.owned:[]).filter(v=>Number.isInteger(v)&&v>=0&&v<108)]));
     S.car=S.owned.includes(raw.car)?raw.car:0;
     S.prog=Array.from({length:3},(_,i)=>Math.floor(num(Array.isArray(raw.prog)?raw.prog[i]:0,i===0?1:0,50)));
     S.stars={};if(raw.stars&&typeof raw.stars==='object')for(const [k,v] of Object.entries(raw.stars))if(/^[0-2]_(?:[0-9]|[1-4][0-9])$/.test(k))S.stars[k]=Math.floor(num(v,0,3));
@@ -451,7 +451,7 @@ function levelCfg(m,n){ // n = 0..49
 }
 
 /* ================= 50 ta mashina ================= */
-const SHAPES=['sedan','hatch','muscle','super','suv','formula','coupe','crossover','pickup','luxury','roadster','van'];
+const SHAPES=['sedan','hatch','muscle','super','suv','formula','coupe','crossover','pickup','luxury','roadster','van','lamborghini','ferrari','rolls','maybach','karoshi'];
 const PRE=['Street','Turbo','Storm','Viper','Nova','Phantom','Blaze','Titan','Comet','Apex'];
 const SUF=['GT','RS','X','SR','Z'];
 // Zavod bo'yoqlari: oddiy neon o'rniga avtomobilga xos metallik ranglar.
@@ -464,12 +464,25 @@ const AUTO_PAINTS=['#cd2229','#d8ab31','#729633','#24aa65','#1aa5b4','#2353aa',
   '#0f6463','#683e82','#c4272c','#f1f1e8','#3d8eaa','#333d4a',
   '#436d46','#a86a26','#dcd8d0','#ba3550','#253955','#707d8a',
   '#5b4335','#c7cdd2'];
-const CARS=Array.from({length:50},(_,i)=>{
-  const t=i/49;
-  return{id:i,name:PRE[i%10]+' '+SUF[Math.floor(i/10)]+' #'+(i+1),
-    shape:SHAPES[i%SHAPES.length],h:(i*47)%360,paint:AUTO_PAINTS[i],stripe:i%11===3?'#ecebee':i%13===6?'#151923':null,spoiler:i%7===3||i%12===5,variant:Math.floor(i/SHAPES.length),
-    max:170+t*110,acc:52+t*52,hand:1+t*.45,nit:50+t*40,
-    price:i===0?0:Math.round(60+i*i*1.6)};
+const NAMES={
+  lamborghini:['Aventador','Huracán','Countach','Murciélago','Reventon','Sian','Urus','Gallardo','Diablo'],
+  ferrari:['488','F8','Portofino','Roma','SF90','LaFerrari','GTO','Testarossa','Monza'],
+  rolls:['Phantom','Ghost','Wraith','Dawn','Spectre','Corniche','Silver Shadow'],
+  maybach:['S580','GLS600','57','62','Exelero','Zeppelin','Landaulet'],
+  karoshi:['Ferdaus','Junoon','Mehran','Coure','Karvaan','Autos','City']
+};
+const CARS=Array.from({length:108},(_,i)=>{
+  const t=i/107;let shapeIdx,carName='Car';
+  if(i<9)shapeIdx=SHAPES.indexOf('lamborghini'),carName=NAMES.lamborghini[i]+' '+String(i+1);
+  else if(i<18)shapeIdx=SHAPES.indexOf('ferrari'),carName=NAMES.ferrari[i-9]+' '+String(i+1);
+  else if(i<25)shapeIdx=SHAPES.indexOf('rolls'),carName=NAMES.rolls[i-18]+' '+String(i+1);
+  else if(i<32)shapeIdx=SHAPES.indexOf('maybach'),carName=NAMES.maybach[i-25]+' '+String(i+1);
+  else if(i<40)shapeIdx=SHAPES.indexOf('karoshi'),carName=NAMES.karoshi[i-32]+' '+String(i+1);
+  else shapeIdx=i%SHAPES.length,carName=PRE[i%10]+' '+SUF[Math.floor(i/10)]+' #'+(i+1);
+  return{id:i,name:carName,
+    shape:SHAPES[shapeIdx],h:(i*47)%360,paint:AUTO_PAINTS[i%AUTO_PAINTS.length],stripe:i%11===3?'#ecebee':i%13===6?'#151923':null,spoiler:i%7===3||i%12===5,variant:Math.floor(i/SHAPES.length),
+    max:170+t*130,acc:52+t*65,hand:1+t*.55,nit:50+t*50,
+    price:i===0?0:Math.round(80+i*i*1.8)};
 });
 
 /* ================= YANGI: avto studiya 2.5D, 12 turdagi kuzov ================= */
@@ -488,7 +501,12 @@ const SH={
  roadster: {w:50,h:93,nw:32,tw:43,cab:[-.05,.30],wh:[.31,.33]},
  van:      {w:51,h:106,nw:43,tw:48,cab:[-.32,.37],wh:[.30,.34]},
  taxi:     {w:47,h:99,nw:36,tw:39,cab:[-.23,.24],wh:[.29,.31]},
- truck:    {w:54,h:158}
+ truck:    {w:54,h:158},
+ lamborghini:{w:56,h:102,nw:28,tw:46,cab:[0,.28],wh:[.31,.32]},
+ ferrari:  {w:54,h:100,nw:30,tw:44,cab:[-.05,.26],wh:[.30,.33]},
+ rolls:    {w:52,h:115,nw:40,tw:42,cab:[-.15,.25],wh:[.31,.34]},
+ maybach:  {w:54,h:120,nw:42,tw:48,cab:[-.22,.28],wh:[.32,.35]},
+ karoshi:  {w:42,h:80,nw:32,tw:36,cab:[-.20,.24],wh:[.25,.26]}
 };
 const cv=$('game'),ctx=cv.getContext('2d');
 let RES=S.settings.quality==='low'?1:2;
@@ -555,8 +573,13 @@ function drawWheels(c,Sx,o){
 function drawSedanish(c,o,p,Sx){
   const w=Sx.w,h=Sx.h,base=o.paint||cl(o.h||0,41,66);
   const front=-h/2,rear=h/2,y0=Sx.cab[0]*h,y1=Sx.cab[1]*h,dy=y1-y0;
-  const sport=['super','muscle','coupe','roadster'].includes(o.shape);
-  const tall=['suv','van','crossover'].includes(o.shape);
+  const sport=['super','muscle','coupe','roadster','lamborghini','ferrari','rolls','maybach'].includes(o.shape);
+  const tall=['suv','van','crossover','maybach','rolls'].includes(o.shape);
+  const luxury=['rolls','maybach','luxury'].includes(o.shape);
+  if(['lamborghini','ferrari'].includes(o.shape))return drawSupercar(c,o,p,Sx);
+  if(o.shape==='rolls')return drawRollsPhantom(c,o,p,Sx);
+  if(o.shape==='maybach')return drawMaybach(c,o,p,Sx);
+  if(o.shape==='karoshi')return drawKaroshi(c,o,p,Sx);
   // Yerga tushgan yumshoq soya va g'ildirak arkalari.
   c.fillStyle='rgba(0,0,0,.22)';c.beginPath();c.ellipse(6,9,w*.69,h*.55,-.02,0,TAU);c.fill();
   c.fillStyle='rgba(0,0,0,.36)';c.beginPath();c.ellipse(3,6,w*.56,h*.515,0,0,TAU);c.fill();
@@ -735,19 +758,16 @@ function drawF1(c,o,p){
   c.fillStyle='#090d12';for(const sx of[-1,1])for(const [y,wheelW,wheelH] of [[-h*.30,12,25],[h*.31,14,27]]){
     rr(c,sx*22-wheelW/2,y-wheelH/2,wheelW,wheelH,4);c.fill();
     c.fillStyle='#5f6876';c.fillRect(sx*22-1.4,y-wheelH*.24,2.8,wheelH*.48);c.fill();c.fillStyle='#090d12';}
-  // Old qanot, aerodinamik old burun.
   c.fillStyle=shadeHex(base,-.22);rr(c,-26,-h/2+2,52,8,2);c.fill();
   c.fillStyle='#0a1018';rr(c,-26,-h/2+7,52,3,1);c.fill();
   c.beginPath();c.moveTo(-4,-h/2+5);c.lineTo(4,-h/2+5);c.lineTo(7,-h*.29);c.lineTo(15,-h*.14);
   c.lineTo(17,h*.07);c.lineTo(11,h*.37);c.lineTo(10,h/2-10);c.lineTo(-10,h/2-10);c.lineTo(-11,h*.37);
   c.lineTo(-17,h*.07);c.lineTo(-15,-h*.14);c.lineTo(-7,-h*.29);c.closePath();
   c.fillStyle=carMetal(c,base,w);c.fill();c.strokeStyle='#101825';c.lineWidth=1.7;c.stroke();
-  // Pilot kabinasi, halo xavfsizlik konstruktsiyasi.
   c.fillStyle='#09131d';c.beginPath();c.ellipse(0,0,9,16,0,0,TAU);c.fill();
   c.fillStyle='#273a4c';c.beginPath();c.ellipse(0,1,5.8,10,0,0,TAU);c.fill();
   c.strokeStyle='#c0cbd3';c.lineWidth=2.3;c.beginPath();c.moveTo(-9,-7);c.lineTo(0,-15);c.lineTo(9,-7);c.stroke();
   c.strokeStyle='#16212d';c.lineWidth=2;c.beginPath();c.moveTo(0,-15);c.lineTo(0,8);c.stroke();
-  // Yon ventilyatsiya kanallari va orqa motor qopqog'i.
   c.fillStyle='#0a121b';for(const side of[-1,1]){poly(c,[[side*12,6],[side*16,11],[side*12,30],[side*8,25]]);c.fill();}
   c.strokeStyle='rgba(255,255,255,.28)';c.lineWidth=1;
   c.beginPath();c.moveTo(-6,16);c.lineTo(-5,39);c.moveTo(6,16);c.lineTo(5,39);c.stroke();
@@ -755,6 +775,49 @@ function drawF1(c,o,p){
   c.fillStyle=shadeHex(base,-.18);rr(c,-24,h/2-14,48,5,1);c.fill();
   c.fillStyle=p.brake?'#ff4a51':'#c22134';c.fillRect(-5,h/2-9,10,3);
   if(p.boost){c.save();c.globalCompositeOperation='lighter';flame(c,0,h/2-5,28+Math.random()*30,6);c.restore();}
+}
+function drawSupercar(c,o,p,Sx){
+  const h=Sx.h,w=Sx.w,base=o.paint||cl(o.h||0,45,70);
+  c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(5,8,w*.9,h*.55,0,0,TAU);c.fill();
+  c.fillStyle='#050a10';for(const sx of[-1,1])for(const wy of[-.32,.2,.35]){rr(c,sx*w/2-6,wy*h-13,12,26,4);c.fill()}
+  bodyPath(c,Sx);c.fillStyle=carMetal(c,base,w);c.fill();c.strokeStyle='rgba(0,0,0,.9)';c.lineWidth=1.8;c.stroke();
+  c.save();bodyPath(c,Sx);c.clip();
+  const vg=c.createLinearGradient(0,-h/2,0,h/2);
+  vg.addColorStop(0,'rgba(255,255,255,.35)');vg.addColorStop(.15,'rgba(255,255,255,.08)');vg.addColorStop(.4,'rgba(0,0,0,.12)');vg.addColorStop(.7,'rgba(255,255,255,.06)');vg.addColorStop(1,'rgba(0,0,0,.4)');
+  c.fillStyle=vg;c.fillRect(-w/2,-h/2,w,h);c.restore();
+  if(o.shape==='lamborghini'){
+    c.fillStyle='#1a2a3a';rr(c,-w*.35,-h*.1,w*.7,h*.35,5);c.fill();
+    c.fillStyle='#ffc700';c.fillRect(-w*.25,-h*.05,w*.5,h*.2);
+  }
+  for(const side of[-1,1]){c.fillStyle='#0e1520';rr(c,side*w*.5-5,-h*.3,10,h*.6,3);c.fill();}
+  if(p.boost){c.save();c.globalCompositeOperation='lighter';for(const sx of[-1,1])flame(c,sx*w*.22,-h/2+10,20+Math.random()*22,6);c.restore();}
+}
+function drawRollsPhantom(c,o,p,Sx){
+  const h=Sx.h,w=Sx.w,base=o.paint||'#1a1a1a';
+  c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(6,10,w*.85,h*.5,0,0,TAU);c.fill();
+  c.fillStyle='#070a10';for(const sx of[-1,1])for(const wy of[-.35,.25,.38]){rr(c,sx*w/2-6.5,wy*h-14,13,28,5);c.fill()}
+  rr(c,-w/2,-h/2,w,h,6);c.fillStyle=carMetal(c,base,w);c.fill();
+  c.strokeStyle='rgba(200,180,140,.6)';c.lineWidth=2.5;c.stroke();
+  c.fillStyle='#d4af37';c.fillRect(-w*.4,-h*.35,w*.8,6);
+  c.fillStyle='rgba(180,160,100,.5)';rr(c,-w*.38,-h*.32,w*.76,5,2);c.fill();
+}
+function drawMaybach(c,o,p,Sx){
+  const h=Sx.h,w=Sx.w,base=o.paint||cl(o.h||0,40,68);
+  c.fillStyle='rgba(0,0,0,.4)';c.beginPath();c.ellipse(7,12,w*.88,h*.52,0,0,TAU);c.fill();
+  c.fillStyle='#0a0f18';for(const sx of[-1,1]){rr(c,sx*w/2-7,-.3*h-14,14,30,5);c.fill();}
+  rr(c,-w/2,-h/2,w,h,7);c.fillStyle=carMetal(c,base,w);c.fill();
+  c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.stroke();
+  c.fillStyle='#2a2a32';rr(c,-w*.45,-h*.4,w*.9,h*.2,4);c.fill();
+  c.fillStyle='rgba(100,140,200,.4)';rr(c,-w*.4,-h*.35,w*.8,h*.15,3);c.fill();
+}
+function drawKaroshi(c,o,p,Sx){
+  const h=Sx.h,w=Sx.w,base=o.paint||'#cc2222';
+  c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(3,6,w*.85,h*.5,0,0,TAU);c.fill();
+  c.fillStyle='#0a0d12';for(const sx of[-1,1]){rr(c,sx*w/2-5.5,-.25*h-10,11,20,3);c.fill()}
+  rr(c,-w/2,-h/2,w,h,4);c.fillStyle=base;c.fill();
+  c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=1.4;c.stroke();
+  c.fillStyle='#1a1a1a';rr(c,-w*.35,-h*.15,w*.7,h*.3,3);c.fill();
+  c.fillStyle='#ffd700';c.fillRect(-w*.25,-h*.1,w*.5,h*.15);
 }
 
 /* ================= audio ================= */
@@ -1408,12 +1471,13 @@ function carCanvas(c,car,w,h,scale){
 }
 function buildGrid(){
   const g=$('grid');g.innerHTML='';thumbs.length=0;
-  CARS.forEach((car,i)=>{
+  for(let i=0;i<Math.min(CARS.length,108);i++){
+    const car=CARS[i];
     const c=document.createElement('canvas');c.width=145;c.height=100;c.title=car.name;
     c.onclick=()=>{gIdx=i;renderGarage()};
     g.appendChild(c);thumbs.push(c);
     carCanvas(c,car,145,100,1.01);
-  });
+  }
 }
 function renderGarage(){
   $('gCoins').textContent='🪙 '+S.coins;
