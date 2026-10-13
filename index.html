@@ -529,11 +529,12 @@ function glassMetal(c,x,y,w,h){
   g.addColorStop(0,'#a0b8c5');g.addColorStop(.13,'#59758c');g.addColorStop(.30,'#20394e');
   g.addColorStop(.53,'#0e1a2a');g.addColorStop(.80,'#25384c');g.addColorStop(1,'#080e18');return g;
 }
-// Mashinalarning bo'yi 14% uzunroq (eni o'zgarmaydi).
-// Bitta koeffitsient garaj, kolleksiya va poygada bir xil ishlaydi.
-const CAR_LENGTH=1.14;
+// Balanslangan haqiqiy avtomobil proporsiyasi: avvalgidan kichikroq, ortiqcha uzun emas.
+// Garaj, kolleksiya, yakka poyga va DUO rejimi uchun bir xil chizish o'lchami.
+const CAR_SIZE=0.92;
+const CAR_LENGTH=1.00;
 function drawCar(c,x,y,o,p){
-  p=p||{};c.save();c.translate(x,y);if(p.angle)c.rotate(p.angle);c.scale(1,CAR_LENGTH);if(p.alpha!=null)c.globalAlpha*=p.alpha;
+  p=p||{};c.save();c.translate(x,y);if(p.angle)c.rotate(p.angle);c.scale(CAR_SIZE,CAR_SIZE*CAR_LENGTH);if(p.alpha!=null)c.globalAlpha*=p.alpha;
   const sh=SH[o.shape]||SH.sedan;
   if(o.shape==='truck')drawTruck(c,o,p);
   else if(o.shape==='formula')drawF1(c,o,p);
@@ -1036,7 +1037,7 @@ function spawnTraffic(){
   else{shape=pick(['sedan','hatch','sedan','taxi','muscle','hatch','super']);kmh=Math.min(130,rnd(58,104)+lvlIdx*.6);
     if(shape==='taxi'){kind='taxi';hue=50}else hue=rnd(0,360);
     enemy=Math.random()<cfg.enemy}
-  h=SH[shape==='taxi'?'taxi':shape].h*CAR_LENGTH;
+  h=SH[shape==='taxi'?'taxi':shape].h*CAR_SIZE*CAR_LENGTH;
   traffic.push({x:laneX(lane),y:-h/2-20,lane,shape,kind,h:h,hue,stripe:null,spoiler:false,kmh,enemy,hp:enemy?cfg.hp:1,
     hit:false,vx:0,spin:0,ang:0,ph:0,bt:0,dir:0,nl:lane,tx:0,willChange:!enemy&&lv>=2&&shape!=='truck'&&Math.random()<.1+lv*.008,nm:false,prevY:-100});
 }
@@ -1130,11 +1131,11 @@ function update(dt){
     t.y+=(P.speed-t.kmh)*K*dt;
   }
   for(const a of traffic){if(a.hit)continue;for(const b of traffic){if(b===a||b.hit||b.lane!==a.lane)continue;
-    const gap=a.y-b.y;if(gap>0&&gap<(SH[a.shape==='taxi'?'taxi':a.shape].h*CAR_LENGTH+b.h)/2+34&&a.kmh>b.kmh)a.kmh=b.kmh}}
+    const gap=a.y-b.y;if(gap>0&&gap<(SH[a.shape==='taxi'?'taxi':a.shape].h*CAR_SIZE*CAR_LENGTH+b.h)/2+34&&a.kmh>b.kmh)a.kmh=b.kmh}}
   if(!G.fin&&!G.dead){
     for(const t of traffic){
       if(t.hit)continue;const Sx=SH[t.shape==='taxi'?'taxi':t.shape];
-      const hx=17+Sx.w*.4,hy=(40+Sx.h*.43)*CAR_LENGTH;
+      const hx=(17+Sx.w*.4)*CAR_SIZE,hy=(40+Sx.h*.43)*CAR_SIZE*CAR_LENGTH;
       if(P.inv<=0&&Math.abs(t.x-P.x)<hx&&Math.abs(t.y-PY)<hy){crash(t);continue}
       if(!t.nm&&t.prevY<PY-30&&t.y>=PY-30&&P.speed>100){const dx=Math.abs(t.x-P.x);t.nm=true;
          if(dx>hx&&dx<hx+38){G.runNear++;G.bonus+=25;P.nitro=Math.min(100,P.nitro+6);popup('YAQIN! +25',P.x,PY-80,'#7fe7ff');beep(900,.08,'triangle',.04,1300)}}
@@ -1145,7 +1146,7 @@ function update(dt){
     if(b.dead)continue;
     for(const t of traffic){
       if(t.hit)continue;const Sx=SH[t.shape==='taxi'?'taxi':t.shape];
-      if(Math.abs(t.x-b.x)<Sx.w/2+2&&Math.abs(t.y-b.y)<Sx.h*CAR_LENGTH/2+8){
+      if(Math.abs(t.x-b.x)<Sx.w*CAR_SIZE/2+2&&Math.abs(t.y-b.y)<Sx.h*CAR_SIZE*CAR_LENGTH/2+8){
         b.dead=true;t.hp--;
         if(t.hp>0){burst(b.x,b.y,5,'spark','#ff8a00');beep(700,.05,'square',.04)}else destroyCar(t);
         break}
